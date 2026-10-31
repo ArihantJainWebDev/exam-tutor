@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# local demo state — reset with `npm run seed`, never committed
+data/store.json
+data/store.json.tmp
+
+.env
+.env.local
+.env.*.local
+
+.DS_Store
+Thumbs.db

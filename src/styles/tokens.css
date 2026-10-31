@@ -1,0 +1,130 @@
+/*
+ * PS 02 art direction — exam paper / notebook (docs/ARCHITECTURE.md §8).
+ * Ruled grid ground, ballpoint blue student text, red-pen corrections, question
+ * numbering with mark allocations in the margin. Visually unrelated to the
+ * meetings product on purpose (D-007).
+ */
+:root {
+  --p-paper: #fbfaf5;
+  --p-ink: #17203a;
+  --p-muted: #7a7f8c;
+  --p-rule: #dfe3ec;
+  --p-accent: #c0392b;
+  --p-ballpoint: #1d3e8c;
+  --p-cell: #f2f1ea;
+  --p-heat: #1d3e8c;
+  --p-font-body: 'Newsreader', 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
+  --p-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --p-font-pen: 'Caveat', 'Segoe Script', cursive;
+}
+
+body {
+  color: var(--p-ink);
+  font-family: var(--p-font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--p-paper);
+  /* grid-paper ground, built from gradients so it works offline */
+  background-image:
+    repeating-linear-gradient(to right, transparent 0 27px, var(--p-rule) 27px 28px),
+    repeating-linear-gradient(to bottom, transparent 0 27px, var(--p-rule) 27px 28px);
+  background-size: 28px 28px;
+}
+
+.mono {
+  font-family: var(--p-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--p-muted);
+}
+
+.pen {
+  font-family: var(--p-font-pen);
+  color: var(--p-accent);
+  font-size: 20px;
+}
+
+.student {
+  color: var(--p-ballpoint);
+}
+
+/* centred single-column document — a different layout language from the ledger */
+.doc {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 28px 72px;
+  background: var(--p-paper);
+  border-left: 1px solid var(--p-rule);
+  border-right: 1px solid var(--p-rule);
+  min-height: 100vh;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--p-rule);
+  margin: 20px 0;
+}
+
+.btn {
+  font-family: var(--p-font-mono);
+  font-size: 12px;
+  color: var(--p-paper);
+  background: var(--p-ballpoint);
+  border: 1px solid var(--p-ballpoint);
+  border-radius: 2px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.btn:hover {
+  opacity: 0.9;
+}
+.btn-quiet {
+  background: transparent;
+  color: var(--p-ballpoint);
+}
+
+/* question-paper item: number on the left, marks in the right margin */
+.qitem {
+  display: grid;
+  grid-template-columns: 40px 1fr 48px;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--p-rule);
+}
+.qnum {
+  font-family: var(--p-font-mono);
+  font-size: 13px;
+  color: var(--p-muted);
+}
+.qmarks {
+  font-family: var(--p-font-mono);
+  font-size: 11px;
+  color: var(--p-muted);
+  text-align: right;
+}
+
+.empty {
+  border: 1px dashed var(--p-rule);
+  background: var(--p-paper);
+  padding: 20px;
+  color: var(--p-muted);
+  font-size: 14px;
+}
+
+.topnav {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  border-bottom: 2px solid var(--p-ink);
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+  font-family: var(--p-font-mono);
+  font-size: 12px;
+}
+.topnav a {
+  color: var(--p-ink);
+  text-decoration: none;
+}
+.topnav a:hover {
+  text-decoration: underline;
+}

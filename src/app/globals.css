@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+/* Layout/reset only. Colour, type and surface come from src/styles/tokens.css. */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
