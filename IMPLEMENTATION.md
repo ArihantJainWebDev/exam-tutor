@@ -9,10 +9,10 @@ This table supersedes the historical hour-based scheduling below. T0–T7 remain
 | 1 | T0: 24-concept graph, 40-item bank, 12 misconceptions, validator, typed loader and content review | implemented; checks recorded in PHASE-LOG.md |
 | 2 | T1/T2/T6: mastery, adaptive selection, diagnostic and persisted student answer loop | implemented; browser acceptance pending |
 | 3 | T4/T3: reasoning-based misconception feedback and spaced revision | implemented; browser acceptance pending |
-| 4 | T5/T7: teacher dashboard, checks, deployment and submission artifacts | pending |
+| 4 | T5/T7: teacher dashboard, checks, deployment and submission artifacts | feature work implemented; hosted setup/video/filing pending |
 
 Phase logs: [PHASE-LOG.md](PHASE-LOG.md). Changes: [CHANGELOG.md](CHANGELOG.md).
-Typing telemetry and computer vision are deferred. NVIDIA live connectivity is not confirmed.
+Typing telemetry and computer vision are deferred. NVIDIA API connectivity is user-verified; in-app live classification remains a release check.
 Content scope and count clarification: D-014 in the root state log.
 
 Solo track: content first, pure functions second, UI last, dashboard when the loop is real. Each phase is one commit;
@@ -106,7 +106,7 @@ returns `none`; a careless wrong answer returns `none` and still drops mastery.
 **Gate:** the card fires on the scripted text and quotes it. **Exit:** if classification is unreliable at H5:15,
 narrow the closed set to the 6 tags the demo actually uses — a smaller honest set beats 12 flaky ones.
 
-## T5 · Teacher dashboard — H5:15–6:00 — `STATUS: pending` · ladder 4 · kill check 8
+## T5 - Teacher dashboard - implemented; production HTTP verified
 
 Files: `lib/cohort.ts`, `/tutor/teacher` route, reuse `Heatmap` from `@/platform/ui`
 
@@ -126,7 +126,7 @@ this phase is skipped entirely rather than mocked (floor condition).
 If it doesn't fit, label the first five session questions as the check and delete the separate mode — the model path is
 identical, so nothing downstream notices.
 
-## T7 · Demo mode — H6:30–9:30 — `STATUS: pending`
+## T7 - Release preparation - docs/checks implemented; deployment/video/filing pending
 
 Per [DEMO.md](DEMO.md): `npm run seed`, three clean mock-mode replays, one live, `/tutor/graph` populated, narration
 dictated, screenshots unedited. No new features, no "one more concept".
@@ -143,3 +143,14 @@ Phase 2 uses server actions and a serialised session service. Tests live in test
 
 
 Phase 3 classifier/SRS are implemented. See PHASE-LOG.md for checks, fixture behavior and pending browser acceptance. D-016 records the scoped Redpen platform mockVariant extension.
+
+
+Phase 4 adds deterministic teacher simulation, atomic Redis persistence (user-approved D-018), production HTTP smoke and release guides. See PHASE-LOG.md and DEPLOYMENT.md. All four feature phases are implemented; no claim of completed deployment or submission.
+
+
+## Approved real-solution revision R1-R4
+
+The active plan is ../docs/REDPEN-REAL-SOLUTION-PLAN.md (D-019). Earlier four-phase demo delivery below is historical. R1 personal sessions/live infrastructure is current; R2 teaching decisions, R3 validated generation and R4 real cohort/release follow.
+
+
+R1-R4 feature implementation is now complete. The earlier R1-current marker is historical. Active architecture: ../docs/REDPEN-REAL-SOLUTION-PLAN.md. See PHASE-LOG.md for real API observations and external release checks.

@@ -147,6 +147,33 @@ body {
 .redpen-card blockquote { margin: 10px 0; overflow-wrap: anywhere; }
 .review-queue { border-top: 1px solid var(--p-rule); margin-top: 24px; }
 .review-queue summary { cursor: pointer; color: var(--p-ballpoint); }
+.teacher-doc { max-width: 1160px; }
+.cohort-disclosure { border-left: 3px solid var(--p-ballpoint); padding-left: 14px; }
+.teacher-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; border-block: 1px solid var(--p-rule); margin: 24px 0; }
+.teacher-summary strong { display: block; font-size: 28px; font-weight: 500; }
+.teacher-summary span { color: var(--p-muted); font-size: 13px; }
+.teacher-heatmap { max-width: 100%; overflow-x: auto; margin: 18px 0 28px; }
+.teacher-heatmap table { min-width: 1100px; }
+.teacher-heatmap th:first-child { min-width: 210px; }
+.teacher-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+.teacher-columns section { min-width: 0; }
+.misconception-frequency { margin: 14px 0; }
+.misconception-frequency > div:first-child { display: flex; justify-content: space-between; gap: 12px; }
+.frequency-track { height: 5px; background: var(--p-rule); margin-top: 6px; }
+.frequency-track span { display: block; height: 100%; background: var(--p-accent); }
+.at-risk-list { list-style: none; padding: 0; }
+.at-risk-list li { border-bottom: 1px solid var(--p-rule); padding: 8px 0; }
+.at-risk-list a { color: var(--p-ballpoint); }
+.at-risk-list span { display: block; font-size: 13px; color: var(--p-muted); }
+.teacher-select { font: inherit; background: var(--p-paper); border: 1px solid var(--p-rule); color: var(--p-ink); padding: 6px; }
+.student-detail { margin-top: 32px; border-top: 1px solid var(--p-rule); }
+.selection-explanation { border-left: 2px solid var(--p-ballpoint); padding-left: 10px; font-size: 14px; }
+.teaching-step { padding: 8px 0; }
+@media (max-width: 760px) {
+  .teacher-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .teacher-columns { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .teacher-doc .student-detail li { flex-wrap: wrap; }
+}
 .mastery-strip { margin-top: 32px; border-top: 1px solid var(--p-rule); }
 .mastery-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--p-rule); }
 @media (max-width: 560px) {

@@ -1,6 +1,8 @@
 import { getStore } from '@/platform';
 import { loadPhysicsContent } from '@/lib/content.server';
 import { Nav } from '@/components/Nav';
+import { currentIdentity } from '../auth';
+import { getPersonalStore } from '@/platform/store/provider';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +14,8 @@ interface MasteryValue {
 /** Concept graph with live mastery from the learner model. Nodes with no evidence stay unmarked, never invented. */
 export default async function GraphPage() {
   const { graph } = await loadPhysicsContent();
-  const masteryFacts = await getStore().all<MasteryValue>('tutor.mastery');
+  const identity = await currentIdentity();
+  const masteryFacts = identity ? await getPersonalStore(identity.id).all<MasteryValue>('tutor.mastery') : [];
   const masteryByConcept = new Map(masteryFacts.map((f) => [f.key, f.value]));
 
   const chapters = [...new Set((graph ?? []).map((c) => c.chapter))];

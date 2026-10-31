@@ -5,12 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/verify-runtime-files.mjs",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts",
-    "seed": "npm run validate:content && node scripts/seed.mjs",
-    "validate:content": "tsx scripts/validate-content.ts"
+    "seed": "npm run validate:content && tsx scripts/seed.ts",
+    "validate:content": "tsx scripts/validate-content.ts",
+    "smoke": "node scripts/smoke.mjs",
+    "setup:local": "node scripts/setup-local.mjs",
+    "check:live": "tsx scripts/check-live.ts",
+    "check:live-learning": "tsx scripts/check-live-learning.ts"
   },
   "dependencies": {
     "next": "^15.5.4",

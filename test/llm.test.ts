@@ -45,7 +45,7 @@ test('MOCK_LLM=1 serves the fixture and never calls the network', async () => {
     const cwd = await fixtureDir();
     process.env.MOCK_LLM = '1';
     const result = await callLlm<{ decisions: unknown[] }>({
-      prompt: 'tutor.classify',
+      prompt: 'tutor.classify', fixtureMode: true,
       input: { segments: [] },
       cwd,
       fetchImpl: neverFetch,
@@ -63,7 +63,7 @@ test('MOCK_LLM=1 with no registered fixture fails loudly instead of inventing da
     const cwd = await fixtureDir();
     process.env.MOCK_LLM = '1';
     await assert.rejects(
-      callLlm({ prompt: 'tutor.explain', input: {}, cwd, fetchImpl: neverFetch }),
+      callLlm({ prompt: 'tutor.explain', fixtureMode: true, input: {}, cwd, fetchImpl: neverFetch }),
       /mocks\/tutor\.explain\.json is missing/,
     );
   } finally {
@@ -79,7 +79,7 @@ test('live mode parses fenced JSON and validates the payload', async () => {
     process.env.LLM_API_KEY = 'test-key';
     const payload = { decisions: [{ statement: 'launch is 8 Nov' }] };
     const result = await callLlm<typeof payload>({
-      prompt: 'tutor.classify',
+      prompt: 'tutor.classify', fixtureMode: true,
       input: { segments: [1, 2] },
       cwd,
       validate: (v) => (Array.isArray((v as { decisions?: unknown[] }).decisions) ? null : 'decisions missing'),
@@ -101,7 +101,7 @@ test('one retry on a validation failure, then success', async () => {
     process.env.LLM_API_KEY = 'test-key';
     let calls = 0;
     const result = await callLlm({
-      prompt: 'tutor.classify',
+      prompt: 'tutor.classify', fixtureMode: true,
       input: {},
       cwd,
       validate: (v) => (Array.isArray((v as { decisions?: unknown[] }).decisions) ? null : 'decisions missing'),
@@ -125,7 +125,7 @@ test('live failure falls back to the fixture and reports source:mock', async () 
     delete process.env.MOCK_LLM;
     process.env.LLM_API_KEY = 'test-key';
     const result = await callLlm<{ decisions: unknown[] }>({
-      prompt: 'tutor.classify',
+      prompt: 'tutor.classify', fixtureMode: true,
       input: {},
       cwd,
       fetchImpl: async () => new Response('rate limited', { status: 429 }),
@@ -136,4 +136,29 @@ test('live failure falls back to the fixture and reports source:mock', async () 
   } finally {
     restore();
   }
+});
+
+
+test('Groq GPT-OSS requests use a completion budget and low reasoning effort', async () => {
+  const restore = snapshotEnv();
+  try {
+    const cwd = await fixtureDir();
+    process.env.LLM_API_KEY = 'test-key';
+    process.env.LLM_BASE_URL = 'https://api.groq.com/openai/v1';
+    process.env.LLM_MODEL = 'openai/gpt-oss-20b';
+    const result = await callLlm({ prompt: 'tutor.classify', input: {}, cwd, maxTokens: 768, responseSchema: { name: 'test_schema', schema: { type: 'object', properties: {}, required: [], additionalProperties: false } },
+      fetchImpl: async (url, init) => {
+        assert.equal(url, 'https://api.groq.com/openai/v1/chat/completions');
+        const body = JSON.parse(String(init?.body));
+        assert.equal(body.max_completion_tokens, 768);
+        assert.equal(body.max_tokens, undefined);
+        assert.equal(body.reasoning_effort, 'low');
+        assert.equal(body.include_reasoning, false);
+        assert.equal(body.response_format.type, 'json_schema');
+        assert.equal(body.response_format.json_schema.strict, true);
+        return okResponse({ decisions: [] });
+      },
+    });
+    assert.equal(result.source, 'live');
+  } finally { restore(); }
 });

@@ -11,6 +11,11 @@ export interface LlmRequest {
   timeoutMs?: number;
   /** Optional fixture suffix; the live prompt stays unchanged. */
   mockVariant?: string;
+  /** Unit tests only. Product requests always use live API and never substitute fixtures. */
+  fixtureMode?: boolean;
+  maxTokens?: number;
+  /** Schema-constrained output for providers/models supporting strict structured outputs. */
+  responseSchema?: { name: string; schema: Record<string, unknown> };
   /** Test hooks only — product code never passes these. */
   cwd?: string;
   fetchImpl?: typeof fetch;
@@ -51,18 +56,16 @@ function parseJsonPayload(content: string): unknown {
 
 /**
  * The only way product code talks to a model (AGENTS.md §3).
- * MOCK_LLM=1 short-circuits to the registered fixture so the demo never depends
- * on the network; live failures retry once, then fall back to the fixture and
- * report source:'mock' so the UI can disclose it.
+ * Product calls are live-only. Fixtures and fixture fallback require explicit test mode.
  */
 export async function callLlm<T>(req: LlmRequest): Promise<LlmResult<T>> {
   const cwd = req.cwd ?? process.cwd();
   const timeoutMs = req.timeoutMs ?? 20000;
   if (req.mockVariant && !/^[a-z0-9-]+$/.test(req.mockVariant)) throw new LlmError('Invalid mock variant.');
   const mockName = req.mockVariant ? `${req.prompt}.${req.mockVariant}` : req.prompt;
-  const mock = await readMock<T>(cwd, mockName);
+  const mock = req.fixtureMode ? await readMock<T>(cwd, mockName) : null;
 
-  if (process.env.MOCK_LLM === '1') {
+  if (req.fixtureMode && process.env.MOCK_LLM === '1') {
     if (mock === null) {
       throw new LlmError(`MOCK_LLM=1 but mocks/${mockName}.json is missing. Register a fixture for every prompt.`);
     }
@@ -71,16 +74,17 @@ export async function callLlm<T>(req: LlmRequest): Promise<LlmResult<T>> {
 
   const apiKey = process.env.LLM_API_KEY;
   if (!apiKey) {
-    if (mock !== null) return { data: mock, source: 'mock', attempts: 0 };
-    throw new LlmError('LLM_API_KEY is not set and no mock fixture exists. Copy .env.example to .env.local.');
+    if (req.fixtureMode && mock !== null) return { data: mock, source: 'mock', attempts: 0 };
+    throw new LlmError('LLM_API_KEY is not configured. Live model access is required.');
   }
 
   const system = await readPrompt(cwd, req.prompt);
-  const base = (process.env.LLM_BASE_URL ?? 'https://api.openai.com/v1').replace(/\/$/, '');
-  const model = process.env.LLM_MODEL ?? 'gpt-4o-mini';
+  const base = (process.env.LLM_BASE_URL ?? 'https://api.groq.com/openai/v1').replace(/\/$/, '');
+  const model = process.env.LLM_MODEL ?? 'openai/gpt-oss-20b';
   const doFetch = req.fetchImpl ?? fetch;
 
   let lastError: unknown = null;
+  let previousContent: string | undefined;
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
       const response = await doFetch(`${base}/chat/completions`, {
@@ -90,13 +94,21 @@ export async function callLlm<T>(req: LlmRequest): Promise<LlmResult<T>> {
         body: JSON.stringify({
           model,
           temperature: 0.2,
-          response_format: { type: 'json_object' },
+          ...(new URL(base).hostname === 'api.groq.com'
+            ? { max_completion_tokens: req.maxTokens ?? 1024,
+                ...(model.startsWith('openai/gpt-oss-') ? { reasoning_effort: 'low', include_reasoning: false } : {}) }
+            : { max_tokens: req.maxTokens ?? 1024 }),
+          response_format: req.responseSchema && new URL(base).hostname === 'api.groq.com' && /^openai\/gpt-oss-(20b|120b)$/.test(model)
+            ? { type: 'json_schema', json_schema: { ...req.responseSchema, strict: true } }
+            : { type: 'json_object' },
           messages: [
             { role: 'system', content: system },
             {
               role: 'user',
               content: typeof req.input === 'string' ? req.input : JSON.stringify(req.input, null, 2),
             },
+            ...(attempt > 1 && lastError instanceof Error && lastError.message.includes('failed validation')
+              ? [...(previousContent ? [{ role: 'assistant', content: previousContent }] : []), { role: 'user', content: `Your previous response was rejected: ${lastError.message}. Return a corrected JSON object satisfying the stated constraints.` }] : []),
           ],
         }),
       });
@@ -104,11 +116,12 @@ export async function callLlm<T>(req: LlmRequest): Promise<LlmResult<T>> {
       const body = (await response.json()) as { choices?: { message?: { content?: string } }[] };
       const content = body.choices?.[0]?.message?.content;
       if (!content) throw new LlmError('LLM response had no message content');
+      previousContent = content;
       const parsed = parseJsonPayload(content);
       const invalid = req.validate?.(parsed) ?? null;
       if (invalid) throw new LlmError(`LLM payload failed validation: ${invalid}`);
 
-      if (process.env.CACHE_LLM === '1') {
+      if (req.fixtureMode && process.env.CACHE_LLM === '1') {
         // Best-effort fixture capture (dev only; read-only filesystems just skip it).
         await mkdir(path.join(cwd, 'mocks'), { recursive: true })
           .then(() => writeFile(path.join(cwd, 'mocks', `${mockName}.json`), JSON.stringify(parsed, null, 2)))
@@ -120,7 +133,7 @@ export async function callLlm<T>(req: LlmRequest): Promise<LlmResult<T>> {
     }
   }
 
-  if (mock !== null) {
+  if (req.fixtureMode && mock !== null) {
     console.warn(`[platform/llm] ${req.prompt} fell back to mock after retries:`, lastError);
     return { data: mock, source: 'mock', attempts: 2 };
   }

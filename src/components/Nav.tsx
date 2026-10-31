@@ -12,7 +12,7 @@ export function Nav() {
       <Link href="/tutor/teacher">Teacher</Link>
       <Link href="/tutor/debug">Model</Link>
       <span style={{ marginLeft: 'auto' }} className="mono">
-        {process.env.MOCK_LLM === '1' ? 'MOCK_LLM=1 · fixtures' : 'Live requested · fallback disclosed'}
+        Live Groq · personal learning
       </span>
     </nav>
   );

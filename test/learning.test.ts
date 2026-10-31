@@ -5,7 +5,14 @@ import { nextQuestion, selectPractice } from '../src/lib/selection';
 import { diagnosticItems } from '../src/lib/diagnostic';
 import { loadPhysicsContent } from '../src/lib/content.server';
 import { createMemoryStore } from '../src/platform/store/memory';
-import { createSessionService } from '../src/app/tutor/session-service';
+import { createSessionService as createService } from '../src/app/tutor/session-service';
+import type { MemoryStore } from '../src/platform/types';
+import type { PhysicsContent } from '../src/lib/content';
+import { noMisconception } from '../src/lib/misconception';
+const createSessionService = (store: MemoryStore, content: PhysicsContent) => createService(store, content, {
+  generate: async () => null,
+  classify: async input => ({ ...noMisconception(), reasoningKind: input.correct ? 'sound' : 'uncertain', reasoningConfidence: input.correct ? 0.95 : 0.2, source: 'live', attempts: 1, fallback: false }),
+});
 import { createFileStore } from '../src/platform/store/file';
 import { mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
 import path from 'node:path';
@@ -131,7 +138,7 @@ test('file-backed session and mastery survive a fresh service/store instance', a
     assert.equal(restored.answered, 1); assert.equal(restored.feedback?.selectedAnswer, item.answer);
     assert.ok(restored.mastery.some(n => n.attempts === 1));
     assert.equal(restored.reviews.length, item.conceptIds.length);
-    assert.equal(restored.feedback?.analysis?.source, 'not-needed');
+    assert.equal(restored.feedback?.analysis?.source, 'live');
   } finally {
     assert.equal(path.dirname(path.resolve(dir)), parent, 'cleanup stays inside the app data directory');
     await rm(dir, { recursive: true, force: true });

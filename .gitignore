@@ -1,5 +1,6 @@
 node_modules/
 .next/
+.next-*/
 out/
 *.tsbuildinfo
 next-env.d.ts
@@ -7,6 +8,8 @@ next-env.d.ts
 # local demo state — reset with `npm run seed`, never committed
 data/store.json
 data/store.json.tmp
+data/test-smoke-*/
+data/test-session-*/
 
 .env
 .env.local

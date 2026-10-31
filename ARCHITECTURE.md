@@ -192,3 +192,21 @@ IO orchestrators live in src/app/tutor/classifier.ts and session-service.ts; pur
 SRS is stored in tutor.srs by concept, with source attempt provenance. Intervals are 1/3/7/21/60 days (24-hour durations), displayed in IST. Correct and updated mastery >0.6 promotes; otherwise correct holds; wrong drops two boxes; misconception resets to box zero with remediation. Thus a wrong answer from box four moves to box two (7 days), not always tomorrow. A misconception always schedules tomorrow. Due means dueAt <= current server time. Correct evidence clears the remediation flag. Selection keeps its documented weights and uses band one for a flagged remediation target while recent-item exclusions still apply.
 
 Diagnoses penalise only item concepts also covered by the selected taxonomy tag. Source metadata survives persistence and refresh. No diagnosis is made solely from choosing a tagged distractor.
+
+
+## Phase 4 persistence and teacher implementation (D-017/D-018)
+
+The teacher cohort is a deterministic pure simulation: 20 learners, three hidden ability archetypes, 40 question events each. Every event uses the same updateMastery as real practice. The first pass covers all 24 concepts; remaining events revisit four focus concepts to support some evidence-qualified risk flags. Misconception events are synthetic and explicitly labelled, not LLM-derived student reasoning. Summary figures and heatmap values are computed from the resulting model states. Student drill-down shows source snapshot and simulated event history.
+
+Teacher initialisation writes only tutor.cohort.demo and tutor.cohort.meta. A seed/content/version signature prevents repeated refresh from duplicating records. It preserves all real practice namespaces. npm run seed is now a TypeScript CLI that resets local evidence and seeds the teacher cohort; it is never run automatically against an existing active learner store.
+
+User explicitly approved Redis for Vercel, overriding the original no-database rule for Redpen only. getStore selects Redis when REST credentials exist; it refuses ephemeral file fallback on Vercel. The Redis adapter wraps MemoryStore semantics over one versioned JSON snapshot. Domain action transactions compute changes in a temporary MemoryStore, then atomically compare-and-set the snapshot revision with Lua EVAL. Conflicts reload/retry; attempt/mastery/SRS/session writes are committed together. Teacher seeding also commits once. No SDK is required.
+
+This whole-snapshot design is bounded to a small hackathon demo, not large multi-user scale. History and simulated evidence increase payload size; authentication and separate live learner identities remain deferred. Local FileStore retains asynchronous writes and per-process serialisation. Platform changes are limited to this repository.
+
+The unused generic /api/llm route was removed; existing domain server actions remain the only product route to classification. Vercel tracing includes content, prompts and fixtures and excludes local data/test folders. See DEPLOYMENT.md for environment variables and external-service verification still required.
+
+
+## Active D-019 architecture
+
+See ../docs/REDPEN-REAL-SOLUTION-PLAN.md. This supersedes shared demo sessions, synthetic default class data and product fixture fallback. Signed personal cookies select isolated learner stores; Redis snapshots are per learner, local writes are transactional/durable, teacher data requires role/cohort authorization, reasoning policy includes correct choices, and constrained generation uses independent solvers. Two distinct coherent verification answers are required for improvement observed. Explicit test fixtures remain only in tests.

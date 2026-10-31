@@ -5,7 +5,7 @@ export type {
   Namespace,
   NewFact,
 } from './types';
-export { createMemoryStore, createFileStore, getStore } from './store';
+export { createMemoryStore, createFileStore, createRedisStore, getStore, withStoreTransaction } from './store';
 export type { MemoryStoreWithDump } from './store';
 export { callLlm, type LlmRequest, type LlmResult } from './llm';
 export { appPath, listJsonFiles, readJsonIfExists } from './fs';

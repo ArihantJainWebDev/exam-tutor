@@ -6,7 +6,12 @@ import { candidateMisconceptions, detectedMisconception, noMisconception, valida
 import { scheduleReview, dueReviews, type ReviewState } from '../src/lib/srs';
 import { initialState, updateMastery } from '../src/lib/mastery';
 import { rankQuestions } from '../src/lib/selection';
-import { createReasoningClassifier } from '../src/app/tutor/classifier';
+import { createReasoningClassifier as makeClassifier } from '../src/app/tutor/classifier';
+import type { LlmRequest } from '../src/platform/llm';
+const createReasoningClassifier = (hooks: Pick<LlmRequest, 'cwd' | 'fetchImpl' | 'fixtureMode'> = {}): ReturnType<typeof makeClassifier> => async (input, taxonomy) => {
+  const variant = hooks.fixtureMode ? cases.find(c => c.itemId === input.item.id && c.reasoning === input.reasoning.trim())?.variant : undefined;
+  return makeClassifier({ ...hooks, mockVariant: variant })(input, taxonomy);
+};
 import { createSessionService } from '../src/app/tutor/session-service';
 import { createMemoryStore } from '../src/platform/store/memory';
 
@@ -21,7 +26,7 @@ const neverFetch: typeof fetch = async () => { throw new Error('Mock mode must n
 test('all scripted fixtures classify their reasoning and arithmetic slip remains none without network', async () => {
   const restore = env();
   try {
-    const content = await loadPhysicsContent(); const classify = createReasoningClassifier({ fetchImpl: neverFetch });
+    const content = await loadPhysicsContent(); const classify = createReasoningClassifier({ fetchImpl: neverFetch, fixtureMode: true });
     const expected = ['m:current-consumed', 'm:angle-from-surface', 'm:denser-bends-away', 'none'];
     for (const [i, c] of cases.entries()) {
       const item = content.bank.find(q => q.id === c.itemId)!;
@@ -35,7 +40,7 @@ test('arbitrary fixture reasoning is conservative; correct answers skip classifi
   const restore = env();
   try {
     const c = await loadPhysicsContent(); const item = c.bank.find(i => i.id === 'elec-05')!;
-    const classify = createReasoningClassifier({ fetchImpl: neverFetch });
+    const classify = createReasoningClassifier({ fetchImpl: neverFetch, fixtureMode: true });
     const result = await classify({ item, answer: 'wrong', reasoning: 'I am not sure.', correct: false }, c.misconceptions);
     assert.equal(result.tag, 'none'); assert.equal(result.source, 'mock');
     const correct = await classify({ item, answer: String(item.answer), reasoning: cases[0].reasoning, correct: true }, c.misconceptions);
@@ -72,7 +77,7 @@ test('invalid live quotes retry then disclose contextual fixture fallback', asyn
   const restore = env('0');
   try {
     const c = await loadPhysicsContent(); const item = c.bank.find(i => i.id === 'elec-05')!; let calls = 0;
-    const classify = createReasoningClassifier({ fetchImpl: async () => { calls++; return new Response(JSON.stringify({ choices: [{ message: { content: JSON.stringify({ tag: 'm:current-consumed', confidence: 0.9, quote: 'fabricated', correctPrinciple: 'wrong', remediationHint: 'wrong' }) } }] })); } });
+    const classify = createReasoningClassifier({ fixtureMode: true, fetchImpl: async () => { calls++; return new Response(JSON.stringify({ choices: [{ message: { content: JSON.stringify({ tag: 'm:current-consumed', confidence: 0.9, quote: 'fabricated', correctPrinciple: 'wrong', remediationHint: 'wrong' }) } }] })); } });
     const result = await classify({ item, answer: 'wrong', reasoning: cases[0].reasoning, correct: false }, c.misconceptions);
     assert.equal(calls, 2); assert.equal(result.source, 'mock'); assert.equal(result.fallback, true); assert.equal(result.tag, 'm:current-consumed');
   } finally { restore(); }
@@ -117,7 +122,7 @@ test('session persists misconception, source and SRS once; due status follows in
       const mastery = concept.id === 'elec:series-circuits' ? 0.3 : 0.8;
       await store.put({ namespace: 'tutor.mastery', key: concept.id, at, sourceId: 'prior', value: { ...initialState(), mastery, logit: Math.log(mastery / (1 - mastery)) } });
     }
-    const svc = createSessionService(store, c, { now: () => clock, classify: createReasoningClassifier({ fetchImpl: neverFetch }) });
+    const svc = createSessionService(store, c, { now: () => clock, classify: createReasoningClassifier({ fetchImpl: neverFetch, fixtureMode: true }) });
     let v = await svc.start('practice'); assert.equal(v.question?.id, 'elec-05'); const token = v.token;
     const item = c.bank.find(i => i.id === 'elec-05')!;
     const input = { token, answer: item.options!.find(o => o !== item.answer)!, reasoning: cases[0].reasoning };

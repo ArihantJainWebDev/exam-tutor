@@ -115,3 +115,74 @@ In a fresh mock diagnostic, answer light-01 incorrectly with the exact surface-a
 ### User browser evidence - Phase 3
 
 User screenshots confirm the mock-mode reflection diagnosis: exact reasoning quote, normal-based correction, fixture disclosure, mastery moving from 50% to about 37%, and next-day remediation review. Two scheduled concepts render. The Model page shows both saved attempts, correct-answer classification skipped, reflection misconception strength and source-linked mastery records. This verifies the scripted browser path; screenshots do not establish refresh/restart persistence, arbitrary live reasoning, mobile behavior or console cleanliness. Model page length is expected because it exposes raw records; no redesign requested.
+
+
+## Phase 4 - teacher dashboard and release preparation - 2026-10-31
+
+Status: feature implementation and local production checks complete. Hosted setup, final browser/live checks, recording and filing remain pending within this final phase. No additional feature phase is planned.
+
+### Delivered
+
+- Pure deterministic simulation of 20 learners/800 question events through existing mastery updates, with three ability archetypes and repeat evidence on selected concepts.
+- Model-derived heatmap, ranked mean gaps with evidence counts, top simulated misconception frequencies, confidence-qualified risk list, learner selector and source/event drill-down.
+- Persistent teacher snapshots isolated from the active practice learner. Initialisation is idempotent and concurrent-safe within a process; Redis commits the initial cohort atomically across instances.
+- User chose Vercel and explicitly approved a Redis service despite the original no-database rule (D-018). Added dependency-free Upstash REST adapter with revision CAS, atomic multi-record actions, retry/reload and no unsafe Vercel file fallback. Local file mode and explicit file path remain supported.
+- Removed unused generic model API, added deployment file tracing, seed CLI cohort setup, isolated production smoke, optional container files, DEPLOYMENT.md and SUBMISSION.md, and replaced the obsolete demo script with current behavior.
+- User reports NVIDIA API connectivity working. This is recorded as user evidence, not an agent-observed live classifier response.
+
+### Verification
+
+- npm run validate:content: passed (24 concepts/40 items/12 tags).
+- npm run typecheck: passed.
+- npm test: 52/52 passed. New tests cover deterministic simulation/independent model replay, weak-group tracking, summaries and evidence-qualified risk flags, isolated/idempotent cohort seeding, Redis version/as-of/reset contract, CAS races, rollback, duplicate submission across instances, Redis failure guards and actual isolated seed CLI execution.
+- npm run build: passed with elevated generated-file access on this Windows host. Source deployment files are prepared; optional Docker build was not executed.
+- npm run smoke: passed against a production Node server with an isolated file store. /tutor, /tutor/graph, /tutor/teacher, teacher selection for learner-03 and /tutor/debug all return 200 with expected content; retired /api/llm returns 404. Smoke process exited and removed its own temporary data. Existing user store was not reset.
+- Redis command/transaction behavior is verified with a controlled REST transport, not a real newly provisioned Upstash database. Hosted credentials are not yet available. CAS uses supported Redis Lua via the documented REST API.
+- Earlier Phase 3 user screenshots establish the fixture browser diagnosis/review path. Teacher visual/mobile interaction and actual in-app live-source classification still need user confirmation.
+
+### Remaining release checklist
+
+- [ ] User creates/imports Vercel project and connects a write-capable Upstash Redis REST integration.
+- [ ] Configure production/preview Redis keys and model environment, deploy intended commit, verify hosted progress across refresh and redeploy.
+- [ ] Inspect teacher heatmap/selector/risk links and narrow layout in a browser.
+- [ ] Verify a new answer produces Live model analysis, not merely fixture fallback.
+- [ ] Record the three-minute demo, retain original screenshots/Wispr evidence and complete official submission fields.
+
+Question generation remains authored-bank selection, not novel generation. The class is simulated, the practice learner is shared, and the syllabus scope includes legacy extension material. These limits are retained in README/SUBMISSION rather than presented as full production classroom support.
+
+Release build tracing follow-up: Windows-generated manifests retained a local store path despite framework glob exclusions. Added a cross-platform post-build manifest guard, verified required runtime JSON/prompt/fixtures, and removed four local data references. Build guard does not alter source data or screenshots. This protects packaged artifacts as well as relying on .gitignore.
+
+
+## Approved real-solution revision R1-R4
+
+The active plan is ../docs/REDPEN-REAL-SOLUTION-PLAN.md (D-019). Earlier four-phase demo delivery below is historical. R1 personal sessions/live infrastructure is current; R2 teaching decisions, R3 validated generation and R4 real cohort/release follow.
+
+
+## Real solution revision R1-R4 (D-019)
+
+Feature implementation complete; Vercel/Redis provisioning and final browser acceptance remain external release checks.
+
+- R1: signed HTTP-only guest identities, per-learner namespaces/local transactions and separate Redis learner snapshots; private Graph/Model views; own reset; teacher access code, expiring teacher cookie and cohort filtering. Local private session/teacher secrets configured without displaying them. Legacy shared data preserved but not assigned to new guests.
+- R2: live reasoning analysis for correct and incorrect answers; slips, uncertainty and misconceptions lead to different teaching actions. Two distinct coherent verification answers are needed for improvement observed. Correct choices with contradictory reasoning are not rewarded as demonstrated understanding.
+- R3: NVIDIA proposes parameter plans in seven vetted physics families across six concept areas. Local solvers own keys and render safe questions; duplicate plans/invalid parameters are rejected. Advanced/unsupported formats remain explicitly reviewed-bank items. API failure remains visible and never substitutes product fixtures.
+- R4: teacher view reads enrolled learners' actual attempts and evidence. Synthetic cohort initialisation removed from the product path and seed CLI. Historical simulation code remains only for regression coverage.
+
+Verification: 63 tests pass; typecheck/content validation pass. Signed-cookie HTTP checks passed for two isolated learners, unauthorised teacher gate and cross-cohort exclusion. Genuine NVIDIA classification and generated questions were observed. The full live wrong-reasoning -> generated check -> second generated check -> improvement loop passed with two 0.95 reasoning-confidence responses, without modifying user data or using fixture outputs. Initial provider timeouts/repeated generation were rejected; validators and explicit error states preserved progress.
+
+Production verification uses .next-production-check to avoid interfering with the running development server. Current final build/smoke results follow below. No public deployment or hosted Redis verification is claimed.
+
+Final result: isolated production build passed, runtime-file guard passed, and production HTTP privacy/teacher authorization smoke passed. All 63 tests plus typecheck/content validation pass. Full live NVIDIA correction and two-question verification flow passed. Latest browser click/layout acceptance and external Vercel/Redis setup remain pending.
+
+
+## D-020 - Groq provider migration
+
+Replaced NVIDIA defaults, environment example, current setup documentation and UI labels with Groq openai/gpt-oss-20b. Groq GPT-OSS uses max_completion_tokens and low reasoning effort; keys remain server-side and local secrets were preserved. Full live diagnosis -> two distinct generated follow-ups -> improvement-observed passed in approximately five seconds. Product remains live-only.
+
+D-020 verification: 64/64 tests pass; typecheck and isolated production build pass; production privacy/teacher smoke passes. Real Groq learning loop passed without fixtures.
+
+
+## D-021 - Strict generated-question format
+
+Investigated the reported reflection answer: 50 degrees to surface correctly yields 40 degrees incidence. Reproduced live generation rejection on synthetic inputs: variant beta then uppercase A violated the renderer contract. Groq GPT-OSS generation now uses a strict JSON schema with lowercase variant enums, closed parameter objects and unused reflection angles; independent solvers and duplicate validation remain mandatory. Validation retries include the rejected assistant response. Notices distinguish invalid output, throttling and provider/transport failure. Five consecutive synthetic live generations and the complete isolated live transfer loop pass. No private learner history transmitted and no learner state reset.
+
+D-021 verification: 66 tests and typecheck pass; isolated production build passes. Five fresh strict-schema live generations pass. First full-loop run encountered a provider interruption during the second reasoning review; repeat complete live loop passed. External provider errors remain possible and never receive fabricated evidence.

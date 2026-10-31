@@ -1,92 +1,78 @@
-# Redpen — PS 02 adaptive exam-prep tutor · solo track
+# Redpen
 
-**Submission:** solo (B) · **This folder is its own repo and a standalone Next.js app** (D-012)
-**Code:** `src/lib` (domain, pure functions) · `src/app` + `src/components` (UI) · `src/platform` (this repo's platform copy) · routes under `/tutor`
-**Read first:** [../docs/DECISIONS.md](../docs/DECISIONS.md) D-005, D-006, D-009, D-012 · [../docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) §4, §8
+Personal physics learning through evidence, correction and verification. The active plan is [docs/REDPEN-REAL-SOLUTION-PLAN.md](../docs/REDPEN-REAL-SOLUTION-PLAN.md); it supersedes the earlier shared demo architecture.
 
-## Run (from this folder)
+## The learning loop
 
+Start a personal guest session -> answer and explain -> live Groq reasoning analysis -> targeted teaching decision -> a new validated follow-up -> evidence of improvement -> spaced review.
+
+A supported misconception triggers a correction and verification. Two distinct correct follow-ups with coherent live reasoning evidence are required before marking improvement observed. This is evidence, not proof of permanent mastery. A correct option with contradictory reasoning does not receive a normal understanding reward. Slips and unclear explanations get different teaching actions.
+
+## Run locally in real mode
+
+```powershell
+npm ci
+npm run setup:local
+# Set LLM_API_KEY in .env.local to your Groq key.
+npm run dev
 ```
-npm install
-cp .env.example .env.local     # MOCK_LLM=1 by default; add LLM_API_KEY for live classification
-npm run dev                    # → http://localhost:3000/tutor
-npm test                       # platform unit tests (10 passing at scaffold time)
+
+Local configuration uses openai/gpt-oss-20b at the Groq OpenAI-compatible endpoint. setup:local creates private session/teacher secrets only if missing and does not print them or overwrite your model key. Our development environment is already configured.
+
+Open /tutor at the printed address. Each browser gets its own signed HTTP-only learner cookie when starting. The same browser resumes progress; another browser gets another learner. No email signup is required. Guest sessions expire after 30 days and do not automatically transfer across devices. Keep SESSION_SECRET stable across deployments.
+
+Use Reset my progress to clear only your learner evidence. Old shared demo records remain legacy data and are never silently assigned to a new guest. Do not run npm run seed to reset an individual student: that CLI clears the entire local store and now creates no synthetic cohort.
+
+## Live AI and validated questions
+
+Product requests always use the real model; MOCK_LLM does not enable a product fixture mode. API failures are visible and never replaced with fixture diagnoses. Controlled transports and explicit fixtures are retained only in automated tests.
+
+Groq analyses reasoning for both correct and incorrect answers, restricted to known misconceptions. Quotes must match the student's text. The server supplies vetted correction principles/hints, independently grades selected answers and computes generated answer keys.
+
+Seven generation families cover six concept areas: Ohm's law, series current/voltage, reflection angles, lens power, electrical energy and myopia correction. Generation is constrained to vetted simple/two-step formats. Advanced difficulty and unsupported concepts use the reviewed 40-item bank, labelled as such. Recent generated plans and content identities prevent repeats; rejected outputs leave progress intact and allow retry.
+
+The diagnostic starts with reviewed syllabus items; targeted verification can be inserted when reasoning indicates a problem. Practice shows why a question was chosen and whether it came from a live generated plan or reviewed bank.
+
+## Teacher and evidence views
+
+/tutor/teacher requires the TEACHER_ACCESS_CODE configured in the private server environment. The code grants an expiring signed teacher session for REDPEN_COHORT_ID (default physics). It is not student signup. A Lock teacher view button signs out.
+
+Teacher metrics come from enrolled guest learners' actual saved attempts, not a seeded class. An empty class stays empty. Students in another cohort are excluded. /tutor/graph and /tutor/debug expose only the current learner's evidence; the evidence page omits unanswered generated answer keys and global records.
+
+## Persistence and Vercel
+
+Local file writes now commit complete operations before acknowledging success. Redis uses one atomic compare-and-set snapshot per learner, so different learners do not share learning state or compete over one learning snapshot. A separate root snapshot contains registration and access limits. Credentials are server-side only.
+
+Follow [DEPLOYMENT.md](DEPLOYMENT.md). Vercel requires connected Upstash REST storage and session/teacher secrets. Production refuses ephemeral-file fallback. The external Redis account and public deployment are not configured by this repository alone.
+
+## Verification
+
+```powershell
+npm run validate:content
 npm run typecheck
+npm test
 npm run build
-npm run seed                   # reset data/store.json for a clean demo take
+npm run smoke
+npm run check:live
+npm run check:live-learning
 ```
 
-Phase 1 content is implemented: 24 concepts, 40 original MCQs, 12 misconception definitions, a typed validator and
-server loader. `/tutor/graph` now loads the authored graph; concepts retain "no evidence" until actual learner
-attempts exist. The student answer loop, runtime prompts, mastery, SRS and teacher model remain for phases 2–4.
-Run `npm run validate:content` to check the bank. See [content/physics/README.md](content/physics/README.md) for
-syllabus scope and review notes, [PHASE-LOG.md](PHASE-LOG.md) for verification, and [CHANGELOG.md](CHANGELOG.md).
+The last two commands make actual Groq requests using your local key. They use an isolated learner and do not reset your progress. Tests and smoke checks use controlled inputs; that is not a product demo mode.
 
-The active delivery plan has four phases; the old T0–T7 labels are detailed task references, not current clock times.
+If a development server is running, isolate production artifacts:
 
-## Thesis, in one line
+```powershell
+$env:REDPEN_BUILD_DIR=".next-production-check"
+npm run build
+npm run smoke
+```
 
-A tutor that keeps a per-concept mastery model, reads the *reasoning* in a wrong answer to name the misconception,
-and changes what it asks next because of it — then shows the whole class's gaps to a teacher.
+The smoke checks separate learner cookies on Graph/Model, teacher authorization and cohort filtering. Browser clicks, layout, actual Vercel/Redis connectivity and security review still need their own checks.
 
-The brief's own framing is the trap to avoid: generic AI tutors answer questions. Ours must demonstrably *know
-something the student did not tell it directly*, and prove it by what it asks next.
+## Scope and docs
 
-## Requirements coverage
+24 concepts across a legacy NCERT physics practice scope, including Sources of Energy extension material. This is not a claim of full current board coverage, empirically validated mastery calibration or production classroom readiness. Live provider latency/limits can affect response time. Guest identity is not full account recovery or institution-grade authentication.
 
-| Requirement | Where | Ladder |
-|---|---|---|
-| Diagnostic test | `lib/diagnostic.ts`, `/tutor` start screen | 5 |
-| Concept graph for one syllabus | `content/physics/graph.json` (5 chapters, ~24 concepts, prereq edges) | data |
-| Learner model updating mastery per concept | `lib/mastery.ts` + `@/platform` ns `tutor.mastery` | 1 |
-| Question generation targeted at weak concepts, difficulty calibrated | `lib/selection.ts` | 1 |
-| Misconception detection from reasoning, not just the wrong answer | `lib/misconception.ts` + `tutor.classify` prompt | 2 |
-| Spaced-repetition scheduling | `lib/srs.ts` (Leitner 1/3/7/21/60d) | 3 |
-| Teacher dashboard, class-wide gaps | `lib/cohort.ts` + `/tutor/teacher` Heatmap | 4 |
+[PHASE-LOG.md](PHASE-LOG.md) records the observed checks and limitations; [CHANGELOG.md](CHANGELOG.md) tracks changes. [DEMO.md](DEMO.md) and [SUBMISSION.md](SUBMISSION.md) describe release evidence without claiming deployment/video/filing are complete.
 
-## Scope ladder — cut from the bottom, silently
-
-1. mastery model + targeted next question · 2. misconception from reasoning · 3. SRS queue · 4. teacher dashboard ·
-5. standalone diagnostic mode · 6. chapters beyond the scripted 5.
-
-**Floor condition (D-009):** this product may not degrade into a static quiz with a mocked dashboard. Items 1 and 2
-are the submission. If they are not working by H5:15, stop all UI work, cut screens down to `/tutor` and
-`/tutor/teacher`, and get the loop honest — an incomplete-but-real model beats a finished-but-fake one, because a
-judge can poke the fake one in ten seconds and cannot poke the real one at all.
-
-## Golden path (see [DEMO.md](DEMO.md))
-
-Answer a Current Electricity question wrong, with written reasoning that says current gets used up → red-pen
-misconception card names `current is consumed in the circuit` and quotes the student's own words → the mastery margin
-for `elec:series-circuits` visibly drops → next question is tagged to that concept at difficulty 1 → SRS puts it due
-in 1 day → teacher heatmap shows 20 learners with real model output.
-
-## Solo-specific protections
-
-- Content first, code second: `graph.json` + `bank.json` (~40 tagged items) are authored/generated in P1, before the
-  platform phase ends. Question authoring at hour 5 is how this track loses item 2.
-- Model functions are pure and tested in the terminal before any component exists. They can be demoed from the console
-  if the UI slips.
-- The H4 cross-help gate: if items 1–2 aren't passing at H4:00, A1 moves over and PS 03 drops to ladder 1–4.
-- No external dependency can break this product. Keep it that way: no DB service, no third-party API, no auth.
-
-## Definition of done for the track
-
-Answering a question measurably changes store state (inspectable in `/tutor/debug`, which is fine to show — it's a
-JSON view of the learner model with timestamps and provenance), the next question provably targets the dropped
-concept, the misconception card quotes the student, the SRS queue moved, and the teacher heatmap numbers come from
-`lib/cohort.ts` running the real model — not literals. Kill checks 5–8 ticked.
-
-## Try Phase 2
-
-Set MOCK_LLM=1, run npm run dev and open /tutor. Start the eight-question diagnostic or direct practice, choose an answer, explain why, submit and continue. Refresh to resume. /tutor/graph and /tutor/debug show saved evidence.
-
-This phase requires no model connection. Questions are selected from the authored bank; novel question generation is not implemented. There is one shared demo learner. To reset, stop the server, run npm run seed and restart it. Browser interaction acceptance is pending; service-level and build checks pass.
-
-## Phase 3: reasoning feedback and revision
-
-Wrong answers with relevant taxonomy candidates are analysed through the model gateway. Supported diagnoses quote your reasoning and add concept-specific remediation. Correct answers skip classification. Every answered concept gets a persisted review schedule; due reviews influence practice selection, and flagged misconceptions prefer easier follow-ups.
-
-MOCK_LLM=1 replays exact scripted examples listed in mocks/tutor.classify.cases.json. Other text conservatively yields no diagnosis. Fixture use and live fallback are disclosed in feedback. Arbitrary reasoning needs a working live endpoint (still unverified here). Feedback saved before Phase 3 is not retroactively analysed; submit a new answer to exercise this feature.
-
-See PHASE-LOG.md for checks and the browser walkthrough. Stop the server before npm run seed if you want to erase demo progress; no reset is required to continue an existing session.
+Stack: Next.js 15, React 19, strict TypeScript, app-owned CSS tokens/Tailwind layout, fetch-based Groq/Upstash adapters and Node tests through tsx. This repository remains independent from PS 03.
