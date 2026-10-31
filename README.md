@@ -76,3 +76,9 @@ Answering a question measurably changes store state (inspectable in `/tutor/debu
 JSON view of the learner model with timestamps and provenance), the next question provably targets the dropped
 concept, the misconception card quotes the student, the SRS queue moved, and the teacher heatmap numbers come from
 `lib/cohort.ts` running the real model — not literals. Kill checks 5–8 ticked.
+
+## Try Phase 2
+
+Set MOCK_LLM=1, run npm run dev and open /tutor. Start the eight-question diagnostic or direct practice, choose an answer, explain why, submit and continue. Refresh to resume. /tutor/graph and /tutor/debug show saved evidence.
+
+This phase requires no model connection. Questions are selected from the authored bank; novel question generation is not implemented. There is one shared demo learner. To reset, stop the server, run npm run seed and restart it. Browser interaction acceptance is pending; service-level and build checks pass.

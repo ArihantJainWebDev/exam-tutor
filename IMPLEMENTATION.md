@@ -7,7 +7,7 @@ This table supersedes the historical hour-based scheduling below. T0–T7 remain
 | Phase | Scope | Status |
 |---|---|---|
 | 1 | T0: 24-concept graph, 40-item bank, 12 misconceptions, validator, typed loader and content review | implemented; checks recorded in PHASE-LOG.md |
-| 2 | T1/T2/T6: mastery, adaptive selection, diagnostic and persisted student answer loop | pending |
+| 2 | T1/T2/T6: mastery, adaptive selection, diagnostic and persisted student answer loop | implemented; browser acceptance pending |
 | 3 | T4/T3: reasoning-based misconception feedback and spaced revision | pending |
 | 4 | T5/T7: teacher dashboard, checks, deployment and submission artifacts | pending |
 
@@ -138,3 +138,5 @@ dictated, screenshots unedited. No new features, no "one more concept".
 - Physics correctness is not negotiable: verify every bank item by hand, including distractors, and keep the wrong
   options *plausibly wrong in misconceived ways* — that is what makes the misconception cards land.
 - If a phase overruns, cut from the bottom of the ladder and log it. Do not let T5 cannibalise T4.
+
+Phase 2 uses server actions and a serialised session service. Tests live in test/ so npm test discovers them. Classification and SRS remain Phase 3; the old T2 mock-classification instruction is superseded by the four-phase plan. See PHASE-LOG.md for verification and limitations.

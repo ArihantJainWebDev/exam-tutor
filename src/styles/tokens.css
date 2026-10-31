@@ -128,3 +128,25 @@ body {
 .topnav a:hover {
   text-decoration: underline;
 }
+
+/* Phase 2 answer document: colours and type stay in app tokens. */
+.session-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.question-body { min-width: 0; }
+.question-stem { font-size: 19px; font-weight: 500; margin: 0; }
+.answer-options { border: 0; padding: 0; margin: 18px 0; }
+.answer-option { display: flex; align-items: baseline; gap: 10px; padding: 8px 0; cursor: pointer; }
+.answer-option input { accent-color: var(--p-ballpoint); }
+.reasoning-label { display: block; margin: 12px 0 6px; }
+.reasoning-input { display: block; box-sizing: border-box; width: 100%; padding: 10px; margin-bottom: 14px; border: 1px solid var(--p-rule); background: var(--p-paper); font: inherit; resize: vertical; }
+.reasoning-input:focus { outline: 2px solid var(--p-ballpoint); outline-offset: 2px; }
+.btn:disabled { opacity: 0.55; cursor: wait; }
+.answer-feedback { padding: 16px 0; border-bottom: 2px solid var(--p-accent); }
+.answer-feedback h2, .session-error { color: var(--p-accent); }
+.mastery-strip { margin-top: 32px; border-top: 1px solid var(--p-rule); }
+.mastery-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--p-rule); }
+@media (max-width: 560px) {
+  .doc { padding: 20px 14px 48px; }
+  .qitem { grid-template-columns: 24px minmax(0, 1fr) 24px; gap: 6px; }
+  .topnav { flex-wrap: wrap; gap: 12px; }
+  .mastery-row { flex-direction: column; gap: 2px; }
+}

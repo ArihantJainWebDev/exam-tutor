@@ -1,5 +1,14 @@
 # Redpen changelog
 
+## 2026-10-31 — Phase 2 implemented
+
+- Added eight-item diagnostic, bounded Rasch mastery, adaptive bank selection and server-owned grading.
+- Added answer/reasoning form, feedback, mastery evidence and saved sessions with refresh/resume.
+- Added duplicate/stale submission handling and per-process mutation serialisation.
+- Added 11 learning/session tests; all 27 tests, content validation, typecheck and production build pass.
+- Browser interaction acceptance pending. Misconception analysis and SRS remain Phase 3.
+
+
 ## 2026-10-31 â€” Phase 1 implemented
 
 - Adopted four phases: content foundation; adaptive tutor with diagnostic; misconception feedback and spaced review; teacher dashboard and submission.
