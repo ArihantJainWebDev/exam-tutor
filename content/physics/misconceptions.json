@@ -1,0 +1,114 @@
+[
+  {
+    "id": "m:current-consumed",
+    "label": "Current is consumed",
+    "conceptIds": [
+      "elec:current",
+      "elec:series-circuits"
+    ],
+    "correctPrinciple": "In a steady series circuit, the same current flows through every component; energy is transferred, not current consumed.",
+    "remediationHint": "Compare charge passing two points in the same series loop each second."
+  },
+  {
+    "id": "m:series-voltage-same",
+    "label": "Every series component gets source voltage",
+    "conceptIds": [
+      "elec:series-circuits"
+    ],
+    "correctPrinciple": "Potential differences across series components add to the source voltage.",
+    "remediationHint": "Add the component voltage drops and compare them with the battery voltage."
+  },
+  {
+    "id": "m:resistance-length-only",
+    "label": "Longer wire means more current",
+    "conceptIds": [
+      "elec:resistivity",
+      "elec:ohms-law"
+    ],
+    "correctPrinciple": "For a uniform wire R = rho L/A; at fixed voltage, current decreases as resistance increases.",
+    "remediationHint": "Hold material and area fixed, then use both R = rho L/A and I = V/R."
+  },
+  {
+    "id": "m:angle-from-surface",
+    "label": "Incidence angle measured from the surface",
+    "conceptIds": [
+      "light:reflection"
+    ],
+    "correctPrinciple": "Angles of incidence and reflection are measured from the normal.",
+    "remediationHint": "Draw a perpendicular to the mirror before measuring the angle."
+  },
+  {
+    "id": "m:plane-image-real",
+    "label": "Plane mirror image is projectable",
+    "conceptIds": [
+      "light:plane-mirror"
+    ],
+    "correctPrinciple": "A plane mirror forms a virtual image; reflected rays do not actually converge behind the mirror.",
+    "remediationHint": "Distinguish actual ray intersections from backward extensions."
+  },
+  {
+    "id": "m:denser-bends-away",
+    "label": "Light entering glass bends away",
+    "conceptIds": [
+      "light:refraction"
+    ],
+    "correctPrinciple": "For oblique incidence from air into glass, light slows and bends toward the normal.",
+    "remediationHint": "Compare speed in air and glass, then locate the normal."
+  },
+  {
+    "id": "m:ignores-sign-convention",
+    "label": "Distances used without signs",
+    "conceptIds": [
+      "light:spherical-mirrors",
+      "light:lenses",
+      "light:lens-power"
+    ],
+    "correctPrinciple": "Use the Cartesian sign convention consistently when applying mirror or lens equations.",
+    "remediationHint": "Mark the optical centre or pole and the positive direction before substituting distances."
+  },
+  {
+    "id": "m:power-is-energy",
+    "label": "Power rating equals energy consumed",
+    "conceptIds": [
+      "elec:power-energy"
+    ],
+    "correctPrinciple": "Power is the rate of energy transfer; energy equals power multiplied by time.",
+    "remediationHint": "Write units for power and time, then calculate E = Pt."
+  },
+  {
+    "id": "m:short-vs-overload",
+    "label": "Short circuit and overload are identical",
+    "conceptIds": [
+      "magnet:domestic-safety"
+    ],
+    "correctPrinciple": "An overload is excessive current from demand; a short circuit is an unintended low-resistance path.",
+    "remediationHint": "Identify whether too many appliances or direct live-neutral contact caused the current."
+  },
+  {
+    "id": "m:myopia-convex",
+    "label": "Myopia needs a convex lens",
+    "conceptIds": [
+      "eye:vision-defects"
+    ],
+    "correctPrinciple": "Myopia is corrected using a concave lens, which diverges incoming rays.",
+    "remediationHint": "Locate the uncorrected distant image relative to the retina."
+  },
+  {
+    "id": "m:scattering-agnostic",
+    "label": "Sky colour independent of wavelength",
+    "conceptIds": [
+      "eye:scattering"
+    ],
+    "correctPrinciple": "Small atmospheric particles scatter shorter visible wavelengths more strongly than longer wavelengths.",
+    "remediationHint": "Compare scattering of blue and red light."
+  },
+  {
+    "id": "m:solar-stores-power",
+    "label": "A solar cell stores energy",
+    "conceptIds": [
+      "energy:solar"
+    ],
+    "correctPrinciple": "A solar cell converts light into electrical energy; a separate storage device is needed for later use.",
+    "remediationHint": "Separate the roles of a solar cell and a rechargeable battery."
+  }
+]

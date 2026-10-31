@@ -1,24 +1,11 @@
-import { appPath, getStore, readJsonIfExists } from '@/platform';
+import { getStore } from '@/platform';
+import { loadPhysicsContent } from '@/lib/content.server';
 import { Nav } from '@/components/Nav';
 
 export const dynamic = 'force-dynamic';
 
-interface Concept {
-  id: string;
-  label: string;
-  chapter: string;
-  prereqs: string[];
-}
-interface Item {
-  id: string;
-  conceptIds: string[];
-  difficulty: 1 | 2 | 3;
-  stem: string;
-}
-
 export default async function TutorPage() {
-  const graph = await readJsonIfExists<Concept[]>(appPath('content', 'physics', 'graph.json'));
-  const bank = await readJsonIfExists<Item[]>(appPath('content', 'physics', 'bank.json'));
+  const { graph, bank } = await loadPhysicsContent();
   const mastery = await getStore().all('tutor.mastery');
 
   return (
@@ -48,7 +35,7 @@ export default async function TutorPage() {
             </span>
           )}
         </div>
-        <span className="qmarks">[3]</span>
+        <span className="qmarks">[{bank[0]?.markAllocation ?? "—"}]</span>
       </div>
 
       <hr className="rule" />

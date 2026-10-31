@@ -1,0 +1,184 @@
+[
+  {
+    "id": "elec:current",
+    "label": "Current and charge",
+    "chapter": "elec",
+    "prereqs": []
+  },
+  {
+    "id": "elec:potential",
+    "label": "Potential difference",
+    "chapter": "elec",
+    "prereqs": [
+      "elec:current"
+    ]
+  },
+  {
+    "id": "elec:ohms-law",
+    "label": "Ohm’s law",
+    "chapter": "elec",
+    "prereqs": [
+      "elec:potential"
+    ]
+  },
+  {
+    "id": "elec:resistivity",
+    "label": "Resistance and resistivity",
+    "chapter": "elec",
+    "prereqs": [
+      "elec:ohms-law"
+    ]
+  },
+  {
+    "id": "elec:series-circuits",
+    "label": "Series circuits",
+    "chapter": "elec",
+    "prereqs": [
+      "elec:ohms-law"
+    ]
+  },
+  {
+    "id": "elec:parallel-circuits",
+    "label": "Parallel circuits",
+    "chapter": "elec",
+    "prereqs": [
+      "elec:ohms-law"
+    ]
+  },
+  {
+    "id": "elec:power-energy",
+    "label": "Electrical power and energy",
+    "chapter": "elec",
+    "prereqs": [
+      "elec:potential"
+    ]
+  },
+  {
+    "id": "light:reflection",
+    "label": "Reflection and the normal",
+    "chapter": "light",
+    "prereqs": []
+  },
+  {
+    "id": "light:plane-mirror",
+    "label": "Plane mirror images",
+    "chapter": "light",
+    "prereqs": [
+      "light:reflection"
+    ]
+  },
+  {
+    "id": "light:spherical-mirrors",
+    "label": "Spherical mirrors and sign convention",
+    "chapter": "light",
+    "prereqs": [
+      "light:reflection"
+    ]
+  },
+  {
+    "id": "light:refraction",
+    "label": "Refraction and refractive index",
+    "chapter": "light",
+    "prereqs": []
+  },
+  {
+    "id": "light:lenses",
+    "label": "Lenses and image formation",
+    "chapter": "light",
+    "prereqs": [
+      "light:refraction"
+    ]
+  },
+  {
+    "id": "light:lens-power",
+    "label": "Power of a lens",
+    "chapter": "light",
+    "prereqs": [
+      "light:lenses"
+    ]
+  },
+  {
+    "id": "eye:accommodation",
+    "label": "Accommodation",
+    "chapter": "eye",
+    "prereqs": [
+      "light:lenses"
+    ]
+  },
+  {
+    "id": "eye:vision-defects",
+    "label": "Myopia and hypermetropia",
+    "chapter": "eye",
+    "prereqs": [
+      "eye:accommodation"
+    ]
+  },
+  {
+    "id": "eye:dispersion",
+    "label": "Dispersion of white light",
+    "chapter": "eye",
+    "prereqs": [
+      "light:refraction"
+    ]
+  },
+  {
+    "id": "eye:scattering",
+    "label": "Wavelength-dependent scattering",
+    "chapter": "eye",
+    "prereqs": []
+  },
+  {
+    "id": "magnet:field-lines",
+    "label": "Magnetic field lines",
+    "chapter": "magnet",
+    "prereqs": []
+  },
+  {
+    "id": "magnet:current-field",
+    "label": "Field around a current-carrying wire",
+    "chapter": "magnet",
+    "prereqs": [
+      "magnet:field-lines",
+      "elec:current"
+    ]
+  },
+  {
+    "id": "magnet:solenoid",
+    "label": "Magnetic field of a solenoid",
+    "chapter": "magnet",
+    "prereqs": [
+      "magnet:current-field"
+    ]
+  },
+  {
+    "id": "magnet:force",
+    "label": "Force on a current-carrying conductor",
+    "chapter": "magnet",
+    "prereqs": [
+      "magnet:current-field"
+    ]
+  },
+  {
+    "id": "magnet:domestic-safety",
+    "label": "Domestic circuits and safety",
+    "chapter": "magnet",
+    "prereqs": [
+      "elec:parallel-circuits",
+      "elec:power-energy"
+    ]
+  },
+  {
+    "id": "energy:source-choice",
+    "label": "Renewable sources and trade-offs",
+    "chapter": "energy",
+    "prereqs": []
+  },
+  {
+    "id": "energy:solar",
+    "label": "Solar conversion and storage",
+    "chapter": "energy",
+    "prereqs": [
+      "energy:source-choice"
+    ]
+  }
+]

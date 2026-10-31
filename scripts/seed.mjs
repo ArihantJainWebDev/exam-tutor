@@ -11,5 +11,5 @@ await mkdir(dataDir, { recursive: true });
 await writeFile(path.join(dataDir, 'store.json'), JSON.stringify({ facts: [] }, null, 2));
 
 console.log('[seed] learner model reset to empty.');
-console.log('[seed] content is read from content/physics/*.json (phase T0 authors it).');
+console.log('[seed] validated physics content is loaded from content/physics/*.json; no learner evidence is fabricated.');
 console.log('[seed] next: MOCK_LLM=1 npm run dev → http://localhost:3000/tutor');

@@ -1,0 +1,860 @@
+[
+  {
+    "id": "elec-01",
+    "conceptIds": [
+      "elec:current"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "A charge of 6 C passes a point in 3 s. What is the current?",
+    "options": [
+      "2 A",
+      "18 A",
+      "0.5 A",
+      "3 A"
+    ],
+    "answer": "2 A",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "I = Q/t = 6/3 = 2 A.",
+    "markAllocation": 1
+  },
+  {
+    "id": "elec-02",
+    "conceptIds": [
+      "elec:potential"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "A source does 12 J of work moving 3 C of charge. What is its potential difference?",
+    "options": [
+      "4 V",
+      "36 V",
+      "0.25 V",
+      "9 V"
+    ],
+    "answer": "4 V",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "V = W/Q = 12/3 = 4 V.",
+    "markAllocation": 1
+  },
+  {
+    "id": "elec-03",
+    "conceptIds": [
+      "elec:ohms-law"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "A 2 V supply is connected across a 0.5 ohm resistor. Find the current.",
+    "options": [
+      "1 A",
+      "4 A",
+      "0.25 A",
+      "2.5 A"
+    ],
+    "answer": "4 A",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "I = V/R = 2/0.5 = 4 A. A division slip alone does not establish a misconception.",
+    "markAllocation": 1
+  },
+  {
+    "id": "elec-04",
+    "conceptIds": [
+      "elec:resistivity"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A wire is stretched to twice its length at constant volume and temperature. Its material is unchanged. How does resistance change?",
+    "options": [
+      "2R",
+      "R/2",
+      "4R",
+      "R"
+    ],
+    "answer": "4R",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:resistance-length-only"
+    ],
+    "explanation": "Area halves at constant volume. R = rho L/A therefore becomes four times the original resistance.",
+    "markAllocation": 2
+  },
+  {
+    "id": "elec-05",
+    "conceptIds": [
+      "elec:series-circuits"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Two identical idealised bulbs are connected in series to a battery. Compare the currents through the bulbs.",
+    "options": [
+      "First bulb has greater current",
+      "Second bulb has greater current",
+      "Both have the same current",
+      "Current is zero after the first bulb"
+    ],
+    "answer": "Both have the same current",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:current-consumed"
+    ],
+    "explanation": "The same current flows throughout a steady series circuit. Energy is transferred in each bulb.",
+    "markAllocation": 1
+  },
+  {
+    "id": "elec-06",
+    "conceptIds": [
+      "elec:series-circuits"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A 2 ohm and a 4 ohm resistor are in series across 12 V. What is the voltage across the 4 ohm resistor?",
+    "options": [
+      "12 V",
+      "6 V",
+      "4 V",
+      "8 V"
+    ],
+    "answer": "8 V",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:series-voltage-same"
+    ],
+    "explanation": "Total resistance is 6 ohm, so current is 2 A; the 4 ohm resistor has V = 2 x 4 = 8 V.",
+    "markAllocation": 2
+  },
+  {
+    "id": "elec-07",
+    "conceptIds": [
+      "elec:parallel-circuits"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Two 6 ohm resistors are connected in parallel. Find equivalent resistance.",
+    "options": [
+      "12 ohm",
+      "6 ohm",
+      "3 ohm",
+      "1/3 ohm"
+    ],
+    "answer": "3 ohm",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "1/R = 1/6 + 1/6 = 1/3, hence R = 3 ohm.",
+    "markAllocation": 1
+  },
+  {
+    "id": "elec-08",
+    "conceptIds": [
+      "elec:power-energy"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A 100 W lamp runs for 2 hours. How much electrical energy does it use?",
+    "options": [
+      "100 J",
+      "200 kWh",
+      "0.2 kWh",
+      "50 Wh"
+    ],
+    "answer": "0.2 kWh",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:power-is-energy"
+    ],
+    "explanation": "100 W = 0.1 kW. E = Pt = 0.1 x 2 = 0.2 kWh.",
+    "markAllocation": 2
+  },
+  {
+    "id": "elec-09",
+    "conceptIds": [
+      "elec:ohms-law",
+      "elec:series-circuits"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "A 3 ohm and a 6 ohm resistor are in series across an ideal 18 V battery. The 6 ohm resistor is bypassed by an ideal wire. What happens to total current?",
+    "options": [
+      "2 A to 6 A",
+      "2 A to 3 A",
+      "6 A to 2 A",
+      "It stays 2 A"
+    ],
+    "answer": "2 A to 6 A",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "Initially I = 18/9 = 2 A. Bypassing the 6 ohm resistor leaves 3 ohm, so I = 18/3 = 6 A.",
+    "markAllocation": 3
+  },
+  {
+    "id": "elec-10",
+    "conceptIds": [
+      "elec:parallel-circuits",
+      "elec:power-energy"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "A 6 ohm and a 3 ohm resistor are connected in parallel across 6 V. What is the total power?",
+    "options": [
+      "6 W",
+      "12 W",
+      "18 W",
+      "3 W"
+    ],
+    "answer": "18 W",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:power-is-energy"
+    ],
+    "explanation": "Branch powers are V²/R: 6 W and 12 W. Total power is 18 W.",
+    "markAllocation": 3
+  },
+  {
+    "id": "elec-11",
+    "conceptIds": [
+      "elec:resistivity"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Two wires have the same material and length, but the second has twice the cross-sectional area. Its resistance is:",
+    "options": [
+      "2R",
+      "R/2",
+      "4R",
+      "R"
+    ],
+    "answer": "R/2",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:resistance-length-only"
+    ],
+    "explanation": "R = rho L/A, so doubling area halves resistance.",
+    "markAllocation": 1
+  },
+  {
+    "id": "elec-12",
+    "conceptIds": [
+      "elec:series-circuits"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "Two unequal resistors are in series across a battery. Which pair of statements is correct?",
+    "options": [
+      "Same current; greater resistance has greater voltage drop",
+      "Same voltage; greater resistance has greater current",
+      "Current decreases after the first resistor; voltage is equal",
+      "Same current; both drops equal the battery voltage"
+    ],
+    "answer": "Same current; greater resistance has greater voltage drop",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:current-consumed",
+      "m:series-voltage-same"
+    ],
+    "explanation": "Series current is common and V = IR, so greater resistance has greater voltage drop.",
+    "markAllocation": 3
+  },
+  {
+    "id": "light-01",
+    "conceptIds": [
+      "light:reflection"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "A ray makes 30 degrees with a plane mirror surface. What is its angle of incidence?",
+    "options": [
+      "30 degrees",
+      "60 degrees",
+      "90 degrees",
+      "0 degrees"
+    ],
+    "answer": "60 degrees",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:angle-from-surface"
+    ],
+    "explanation": "The normal is perpendicular to the surface, so i = 90 - 30 = 60 degrees.",
+    "markAllocation": 1
+  },
+  {
+    "id": "light-02",
+    "conceptIds": [
+      "light:plane-mirror"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Can the image formed by a plane mirror be obtained directly on a screen behind it?",
+    "options": [
+      "Yes, because it is real",
+      "No, because it is virtual",
+      "Yes, if the screen is far away",
+      "Only when the object is close"
+    ],
+    "answer": "No, because it is virtual",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:plane-image-real"
+    ],
+    "explanation": "Backward ray extensions meet behind the mirror; actual reflected rays do not converge there.",
+    "markAllocation": 1
+  },
+  {
+    "id": "light-03",
+    "conceptIds": [
+      "light:spherical-mirrors"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A concave mirror has f = -10 cm. An object is at u = -30 cm. Using 1/f = 1/v + 1/u, find v.",
+    "options": [
+      "+15 cm",
+      "-15 cm",
+      "-7.5 cm",
+      "+7.5 cm"
+    ],
+    "answer": "-15 cm",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:ignores-sign-convention"
+    ],
+    "explanation": "1/v = -1/10 + 1/30 = -1/15, so v = -15 cm.",
+    "markAllocation": 2
+  },
+  {
+    "id": "light-04",
+    "conceptIds": [
+      "light:refraction"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "A ray enters glass from air at an oblique angle. What happens?",
+    "options": [
+      "Slows and bends toward the normal",
+      "Speeds up and bends away",
+      "Slows and bends away",
+      "Speed stays unchanged"
+    ],
+    "answer": "Slows and bends toward the normal",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:denser-bends-away"
+    ],
+    "explanation": "Glass has greater refractive index than air, reducing speed and bending the ray toward the normal.",
+    "markAllocation": 1
+  },
+  {
+    "id": "light-05",
+    "conceptIds": [
+      "light:lenses"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "An object is placed at 2F of a thin convex lens. Its image is:",
+    "options": [
+      "Virtual and enlarged",
+      "Real, inverted and same size at 2F on the other side",
+      "Real and diminished at F",
+      "Virtual and same size"
+    ],
+    "answer": "Real, inverted and same size at 2F on the other side",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "The standard convex-lens ray diagram places the image at 2F on the opposite side, real, inverted and equal in size.",
+    "markAllocation": 2
+  },
+  {
+    "id": "light-06",
+    "conceptIds": [
+      "light:lens-power"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "A concave lens has focal length -0.50 m. What is its power?",
+    "options": [
+      "+2 D",
+      "-2 D",
+      "-0.5 D",
+      "+0.5 D"
+    ],
+    "answer": "-2 D",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:ignores-sign-convention"
+    ],
+    "explanation": "P = 1/f in metres = 1/(-0.50) = -2 D.",
+    "markAllocation": 1
+  },
+  {
+    "id": "light-07",
+    "conceptIds": [
+      "light:lenses",
+      "light:lens-power"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "A convex lens of power +5 D has an object at u = -30 cm. Using 1/f = 1/v - 1/u, find v.",
+    "options": [
+      "+60 cm",
+      "-60 cm",
+      "+12 cm",
+      "-12 cm"
+    ],
+    "answer": "+60 cm",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:ignores-sign-convention"
+    ],
+    "explanation": "f = 1/5 m = +20 cm. 1/v = 1/20 - 1/30 = 1/60, so v = +60 cm.",
+    "markAllocation": 3
+  },
+  {
+    "id": "light-08",
+    "conceptIds": [
+      "light:reflection",
+      "light:plane-mirror"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "An object moves 2 cm toward a fixed plane mirror. By how much does object-image separation decrease?",
+    "options": [
+      "2 cm",
+      "4 cm",
+      "1 cm",
+      "0 cm"
+    ],
+    "answer": "4 cm",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:plane-image-real"
+    ],
+    "explanation": "Object and virtual image each move 2 cm toward the mirror; their separation decreases by 4 cm.",
+    "markAllocation": 2
+  },
+  {
+    "id": "light-09",
+    "conceptIds": [
+      "light:refraction"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "Light travels at 3 x 10^8 m/s in vacuum and 2 x 10^8 m/s in a medium. Find the absolute refractive index.",
+    "options": [
+      "2/3",
+      "1.5",
+      "6",
+      "1"
+    ],
+    "answer": "1.5",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:denser-bends-away"
+    ],
+    "explanation": "n = c/v = 3/2 = 1.5.",
+    "markAllocation": 2
+  },
+  {
+    "id": "light-10",
+    "conceptIds": [
+      "light:spherical-mirrors"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "A convex mirror has f = +15 cm and u = -30 cm. Find v and magnification m = -v/u.",
+    "options": [
+      "v = +10 cm; m = +1/3",
+      "v = -10 cm; m = -1/3",
+      "v = +30 cm; m = +1",
+      "v = +10 cm; m = -1/3"
+    ],
+    "answer": "v = +10 cm; m = +1/3",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:ignores-sign-convention"
+    ],
+    "explanation": "1/v = 1/15 + 1/30 = 1/10; v = +10 cm. m = -10/(-30) = +1/3, virtual, erect and diminished.",
+    "markAllocation": 3
+  },
+  {
+    "id": "eye-01",
+    "conceptIds": [
+      "eye:accommodation"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "When a healthy eye shifts focus from a distant object to a nearby one, its lens generally becomes:",
+    "options": [
+      "Thicker, with shorter focal length",
+      "Thinner, with longer focal length",
+      "Unchanged, while the retina moves",
+      "Opaque"
+    ],
+    "answer": "Thicker, with shorter focal length",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "Ciliary muscles allow the lens to become more curved, increasing power and reducing focal length.",
+    "markAllocation": 1
+  },
+  {
+    "id": "eye-02",
+    "conceptIds": [
+      "eye:vision-defects"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Which lens corrects myopia?",
+    "options": [
+      "Convex",
+      "Concave",
+      "Plane glass",
+      "Cylindrical only"
+    ],
+    "answer": "Concave",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:myopia-convex"
+    ],
+    "explanation": "A concave lens diverges incoming light so a distant object is focused on the retina.",
+    "markAllocation": 1
+  },
+  {
+    "id": "eye-03",
+    "conceptIds": [
+      "eye:dispersion"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Which colour deviates least in an ordinary glass prism?",
+    "options": [
+      "Violet",
+      "Blue",
+      "Green",
+      "Red"
+    ],
+    "answer": "Red",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "For ordinary glass in the visible range, red light has the smallest refractive index and deviates least.",
+    "markAllocation": 1
+  },
+  {
+    "id": "eye-04",
+    "conceptIds": [
+      "eye:scattering"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "Why does a clear daytime sky usually appear blue?",
+    "options": [
+      "Air scatters all visible wavelengths equally",
+      "Shorter visible wavelengths are scattered more strongly",
+      "The atmosphere reflects blue oceans",
+      "Red light cannot enter air"
+    ],
+    "answer": "Shorter visible wavelengths are scattered more strongly",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:scattering-agnostic"
+    ],
+    "explanation": "Small atmospheric particles scatter shorter visible wavelengths more strongly; blue is prominent in scattered skylight.",
+    "markAllocation": 2
+  },
+  {
+    "id": "eye-05",
+    "conceptIds": [
+      "eye:vision-defects"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "A myopic eye has a far point of 2 m. What lens power lets it see distant objects, assuming the lens is close to the eye?",
+    "options": [
+      "+0.5 D",
+      "-0.5 D",
+      "+2 D",
+      "-2 D"
+    ],
+    "answer": "-0.5 D",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:myopia-convex"
+    ],
+    "explanation": "For an object at infinity, the corrective lens makes a virtual image at -2 m. f = -2 m, so P = -0.5 D.",
+    "markAllocation": 3
+  },
+  {
+    "id": "eye-06",
+    "conceptIds": [
+      "eye:accommodation",
+      "eye:vision-defects"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A hypermetropic student sees distant objects clearly but struggles with nearby print. Which correction helps?",
+    "options": [
+      "Concave lens to diverge rays",
+      "Convex lens to add convergence",
+      "Plane mirror",
+      "A lens with zero power"
+    ],
+    "answer": "Convex lens to add convergence",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "A convex lens supplies convergence so nearby objects can be focused on the retina.",
+    "markAllocation": 2
+  },
+  {
+    "id": "magnet-01",
+    "conceptIds": [
+      "magnet:field-lines"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Outside a bar magnet, magnetic field lines run:",
+    "options": [
+      "South to north",
+      "North to south",
+      "Only in straight lines",
+      "From both poles outward without returning"
+    ],
+    "answer": "North to south",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "Outside the magnet the direction is north to south; inside it is south to north, forming closed loops.",
+    "markAllocation": 1
+  },
+  {
+    "id": "magnet-02",
+    "conceptIds": [
+      "magnet:current-field"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Current flows vertically upward in a straight wire. Viewed from above, the magnetic field circles:",
+    "options": [
+      "Clockwise",
+      "Anticlockwise",
+      "Radially outward",
+      "Vertically upward"
+    ],
+    "answer": "Anticlockwise",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "The right-hand thumb points up; curled fingers run anticlockwise when viewed from above.",
+    "markAllocation": 1
+  },
+  {
+    "id": "magnet-03",
+    "conceptIds": [
+      "magnet:solenoid"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A solenoid keeps the same geometry and core. What happens to its internal magnetic field when current is doubled?",
+    "options": [
+      "Approximately doubles",
+      "Halves",
+      "Reverses automatically",
+      "Becomes zero"
+    ],
+    "answer": "Approximately doubles",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "For fixed turns per unit length and core response in the linear regime, magnetic field is proportional to current.",
+    "markAllocation": 2
+  },
+  {
+    "id": "magnet-04",
+    "conceptIds": [
+      "magnet:force"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A current-carrying wire is perpendicular to a uniform magnetic field. Only current direction is reversed. The force:",
+    "options": [
+      "Reverses direction",
+      "Keeps its direction",
+      "Becomes zero",
+      "Always doubles"
+    ],
+    "answer": "Reverses direction",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "Reversing current reverses the magnetic force direction for a fixed magnetic field.",
+    "markAllocation": 2
+  },
+  {
+    "id": "magnet-05",
+    "conceptIds": [
+      "magnet:domestic-safety"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "Too many high-power appliances run from one circuit and exceed its current rating. This is:",
+    "options": [
+      "An overload",
+      "Necessarily a short circuit",
+      "Earthing",
+      "Electromagnetic induction"
+    ],
+    "answer": "An overload",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:short-vs-overload"
+    ],
+    "explanation": "Excess demand is an overload; a short circuit instead involves an unintended low-resistance path.",
+    "markAllocation": 2
+  },
+  {
+    "id": "magnet-06",
+    "conceptIds": [
+      "magnet:domestic-safety",
+      "elec:power-energy"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "Two 1000 W appliances run together on 200 V. Is a 5 A fuse adequate for normal operation?",
+    "options": [
+      "Yes, current is 2.5 A",
+      "Yes, current is 5 A",
+      "No, current is 10 A",
+      "No, current is 20 A"
+    ],
+    "answer": "No, current is 10 A",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:short-vs-overload",
+      "m:power-is-energy"
+    ],
+    "explanation": "Total power is 2000 W; I = P/V = 10 A, above the 5 A fuse rating.",
+    "markAllocation": 3
+  },
+  {
+    "id": "magnet-07",
+    "conceptIds": [
+      "magnet:force"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "A wire carries current parallel to a uniform magnetic field. What is the magnetic force, and what happens if only current reverses?",
+    "options": [
+      "Zero in both cases",
+      "Nonzero, then reverses",
+      "Nonzero, unchanged",
+      "Zero, then nonzero"
+    ],
+    "answer": "Zero in both cases",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "Force is zero when current is parallel or antiparallel to the field; reversing current keeps them collinear.",
+    "markAllocation": 3
+  },
+  {
+    "id": "energy-01",
+    "conceptIds": [
+      "energy:source-choice"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "Which energy source is renewable on human timescales?",
+    "options": [
+      "Coal",
+      "Petroleum",
+      "Wind",
+      "Natural gas"
+    ],
+    "answer": "Wind",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "Wind is replenished by atmospheric processes; fossil fuels form far more slowly than they are consumed.",
+    "markAllocation": 1
+  },
+  {
+    "id": "energy-02",
+    "conceptIds": [
+      "energy:solar"
+    ],
+    "difficulty": 1,
+    "kind": "mcq",
+    "stem": "What is the main function of a photovoltaic solar cell?",
+    "options": [
+      "Store electrical energy overnight",
+      "Convert light into electrical energy",
+      "Convert electrical energy into sunlight",
+      "Produce electricity only from heat"
+    ],
+    "answer": "Convert light into electrical energy",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:solar-stores-power"
+    ],
+    "explanation": "A photovoltaic cell converts light into electricity; storage requires a separate device.",
+    "markAllocation": 1
+  },
+  {
+    "id": "energy-03",
+    "conceptIds": [
+      "energy:solar"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "A solar-powered lamp must work after sunset. Which extra component is needed to retain daytime energy?",
+    "options": [
+      "A rechargeable battery",
+      "A larger switch only",
+      "Another wire only",
+      "A mirror only"
+    ],
+    "answer": "A rechargeable battery",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:solar-stores-power"
+    ],
+    "explanation": "A rechargeable battery stores energy converted during daylight for later use.",
+    "markAllocation": 2
+  },
+  {
+    "id": "energy-04",
+    "conceptIds": [
+      "energy:source-choice"
+    ],
+    "difficulty": 2,
+    "kind": "mcq",
+    "stem": "Which statement best compares wind and coal power?",
+    "options": [
+      "Both have unlimited output at every instant",
+      "Wind is variable; coal uses a finite fuel and releases combustion emissions",
+      "Wind consumes coal; coal is renewable",
+      "Neither has environmental impacts"
+    ],
+    "answer": "Wind is variable; coal uses a finite fuel and releases combustion emissions",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [],
+    "explanation": "Wind output varies with conditions. Coal uses finite fuel and produces combustion emissions; both require evaluation of wider impacts.",
+    "markAllocation": 2
+  },
+  {
+    "id": "energy-05",
+    "conceptIds": [
+      "energy:solar",
+      "elec:power-energy"
+    ],
+    "difficulty": 3,
+    "kind": "mcq",
+    "stem": "A panel supplies a constant 100 W for 4 hours. A storage system retains 75% of that energy. How long can it power a 50 W lamp?",
+    "options": [
+      "3 hours",
+      "6 hours",
+      "8 hours",
+      "10 hours"
+    ],
+    "answer": "6 hours",
+    "reasoningPrompt": "Why did you choose that answer? Explain the physical principle and any calculation.",
+    "misconceptionTags": [
+      "m:solar-stores-power",
+      "m:power-is-energy"
+    ],
+    "explanation": "Input energy is 400 Wh; stored usable energy is 300 Wh. Time = 300/50 = 6 hours.",
+    "markAllocation": 3
+  }
+]

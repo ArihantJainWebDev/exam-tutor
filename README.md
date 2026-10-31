@@ -16,8 +16,13 @@ npm run build
 npm run seed                   # reset data/store.json for a clean demo take
 ```
 
-Scaffold is verified (tests, typecheck, build, HTTP smoke). Content, prompts and the model itself are the remaining
-phases below — the shells intentionally show honest empty states.
+Phase 1 content is implemented: 24 concepts, 40 original MCQs, 12 misconception definitions, a typed validator and
+server loader. `/tutor/graph` now loads the authored graph; concepts retain "no evidence" until actual learner
+attempts exist. The student answer loop, runtime prompts, mastery, SRS and teacher model remain for phases 2–4.
+Run `npm run validate:content` to check the bank. See [content/physics/README.md](content/physics/README.md) for
+syllabus scope and review notes, [PHASE-LOG.md](PHASE-LOG.md) for verification, and [CHANGELOG.md](CHANGELOG.md).
+
+The active delivery plan has four phases; the old T0–T7 labels are detailed task references, not current clock times.
 
 ## Thesis, in one line
 

@@ -35,11 +35,15 @@ type Item = {
 Five chapters, NCERT Class 10 Science: Electricity · Light: Reflection and Refraction · Human Eye and the Colourful
 World · Magnetic Effects of Electric Current · Sources of Energy. Chapter numbering differs between textbook
 editions; the `chapter` slugs above are stable and are the only thing code depends on. ~24 concepts, ~40 items,
-2–3 items per concept per difficulty band at the start, expandable with the generation prompt.
+all concepts covered and all difficulty bands represented per chapter, expandable with the generation prompt.
+Phase 1 provides 40 total items, not 2–3 for every concept at every band (D-014).
+Sources of Energy is explicitly legacy/extension practice, not current rationalised textbook coverage.
 
 ## 2. Misconception taxonomy (closed set — this is load-bearing)
 
 `content/physics/misconceptions.json`, one entry per tag: `{ id, label, conceptIds[], correctPrinciple, remediationHint }`.
+An item may have no diagnostic tag when none of this closed set applies. Tags describe possible evidence to look for,
+not an automatic diagnosis for any incorrect option. Phase 1 loader validates schema, references and prerequisite DAG.
 
 | id | the belief |
 |---|---|

@@ -9,7 +9,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts",
-    "seed": "node scripts/seed.mjs"
+    "seed": "npm run validate:content && node scripts/seed.mjs",
+    "validate:content": "tsx scripts/validate-content.ts"
   },
   "dependencies": {
     "next": "^15.5.4",

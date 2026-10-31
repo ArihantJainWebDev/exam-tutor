@@ -1,14 +1,9 @@
-import { appPath, getStore, readJsonIfExists } from '@/platform';
+import { getStore } from '@/platform';
+import { loadPhysicsContent } from '@/lib/content.server';
 import { Nav } from '@/components/Nav';
 
 export const dynamic = 'force-dynamic';
 
-interface Concept {
-  id: string;
-  label: string;
-  chapter: string;
-  prereqs: string[];
-}
 interface MasteryValue {
   mastery: number;
   confidence?: number;
@@ -16,7 +11,7 @@ interface MasteryValue {
 
 /** Concept graph with live mastery from the learner model. Nodes with no evidence stay unmarked, never invented. */
 export default async function GraphPage() {
-  const graph = await readJsonIfExists<Concept[]>(appPath('content', 'physics', 'graph.json'));
+  const { graph } = await loadPhysicsContent();
   const masteryFacts = await getStore().all<MasteryValue>('tutor.mastery');
   const masteryByConcept = new Map(masteryFacts.map((f) => [f.key, f.value]));
 

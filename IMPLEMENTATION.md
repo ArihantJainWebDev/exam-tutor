@@ -1,5 +1,20 @@
 # PS 02 implementation — phase by phase
 
+## Active four-phase delivery plan (2026-10-31, D-013)
+
+This table supersedes the historical hour-based scheduling below. T0–T7 remain technical specifications.
+
+| Phase | Scope | Status |
+|---|---|---|
+| 1 | T0: 24-concept graph, 40-item bank, 12 misconceptions, validator, typed loader and content review | implemented; checks recorded in PHASE-LOG.md |
+| 2 | T1/T2/T6: mastery, adaptive selection, diagnostic and persisted student answer loop | pending |
+| 3 | T4/T3: reasoning-based misconception feedback and spaced revision | pending |
+| 4 | T5/T7: teacher dashboard, checks, deployment and submission artifacts | pending |
+
+Phase logs: [PHASE-LOG.md](PHASE-LOG.md). Changes: [CHANGELOG.md](CHANGELOG.md).
+Typing telemetry and computer vision are deferred. NVIDIA live connectivity is not confirmed.
+Content scope and count clarification: D-014 in the root state log.
+
 Solo track: content first, pure functions second, UI last, dashboard when the loop is real. Each phase is one commit;
 tick here and log in [../docs/STATE.md](../docs/STATE.md). `STATUS: current` marks where the track is.
 
@@ -7,7 +22,12 @@ The gates below are the ones A1 checks at the H4 cross-help review, so be honest
 
 ---
 
-## T0 · Content assets — H0:30–2:00 (inside the shared-platform phase) — `STATUS: pending` · **highest priority**
+## T0 · Content assets — historical H0:30–2:00 — `STATUS: complete`
+
+Delivered 24 concepts, 40 questions, 12 tags, validator and typed loader. Agent content review complete; no claim of
+human teacher approval. Local HTTP smoke could not be completed due to environment socket restrictions. D-014
+supersedes the legacy store-seeding and mandatory-nonempty-tag instructions below: content loads as validated JSON,
+seed resets learner evidence, and unrelated misconceptions are never forced onto an item.
 
 Files: `content/physics/graph.json`, `bank.json`, `misconceptions.json`, plus `prompts/physics.items.md`
 (BUILD-time generator prompt, [PROMPTS.md §1](PROMPTS.md)).
