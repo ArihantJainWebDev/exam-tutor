@@ -61,7 +61,7 @@ test('live correction needs two distinct coherent transfer answers before improv
     classify: async input => ++calls === 1 ? { tag: tag.id, reasoningKind: 'misconception', confidence: 0.95, quote: input.reasoning,
       correctPrinciple: tag.correctPrinciple, remediationHint: tag.remediationHint, source: 'live', attempts: 1, fallback: false }
       : { ...noMisconception(), reasoningKind: 'sound', reasoningConfidence: 0.95, source: 'live', attempts: 1, fallback: false },
-    generate: async input => { assert.equal(input.misconceptionTag, tag.id); const q = buildGeneratedQuestion({ family: 'reflection-angle', variant: 'b', parameters: { angle } }, input.conceptId, 1); angle += 5; return q; },
+    generate: async input => { assert.equal(input.misconceptionTag, tag.id); const q = buildGeneratedQuestion({ family: 'reflection-angle', variant: 'b', parameters: { angle }, task: input.task }, input.conceptId, 1); angle += 5; return q; },
   });
   let v = await svc.answer({ token: 't', answer: '30 degrees', reasoning: 'I measured from the surface.' });
   assert.equal(v.feedback?.decision?.action, 'correct-misconception'); assert.equal(v.learning[0].status, 'verification-needed');

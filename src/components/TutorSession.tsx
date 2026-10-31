@@ -37,6 +37,7 @@ export function TutorSession({ initial }: { initial: SessionView }) {
           <div className="question-body">
             <h2 className="question-stem">{q.stem}</h2>
             <p className="mono">{view.questionSource === 'live-generated' ? 'Live generated plan · independently validated answer' : 'Reviewed question bank'}</p>
+            {view.taskLabel && <p><strong>Thinking task: {view.taskLabel}</strong></p>}
             {view.selectionReason && <p className="selection-explanation">Why this question: {view.selectionReason}</p>}
             <p className="mono">{view.mode === 'diagnostic' ? 'Initial check' : 'Targeted practice'} · {view.selection?.conceptId} · {view.selection?.mastery === null ? 'no evidence yet' : `mastery ${Math.round((view.selection?.mastery ?? 0) * 100)}%`} · difficulty {q.difficulty}</p>
             {view.mode === 'practice' && !view.selection?.readiness && <p className="mono">Prerequisites need more evidence; this selection uses a readiness bonus, not a strict gate.</p>}
@@ -75,7 +76,7 @@ export function TutorSession({ initial }: { initial: SessionView }) {
       </>}
     </section>
     <section aria-label="Concept mastery" className="mastery-strip"><h2>Your concept evidence</h2>
-      {view.learning.filter(l => l.status === 'verification-needed').map(l => <p key={l.conceptId}>Verification needed: {l.conceptId} · {l.successfulChecks}/2 coherent follow-up answers.</p>)}
+      {view.learning.filter(l => l.status === 'verification-needed').map(l => <p key={l.conceptId}>Verification needed: {l.conceptId} · {l.successfulChecks}/2 different thinking tasks verified.</p>)}
       {view.learning.filter(l => l.status === 'improvement-observed').map(l => <p key={l.conceptId}>Improvement observed: {l.conceptId}. Future review checks retention.</p>)}
       <p className="mono">Unanswered concepts have no estimate. Confidence grows over the first five answers per concept.</p>
       {view.mastery.map(c => <div key={c.conceptId} className="mastery-row"><span>{c.label}</span><span className="mono">{c.mastery === null ? 'no evidence' : `${Math.round(c.mastery * 100)}% · ${c.attempts} answers · confidence ${Math.round(c.confidence * 100)}%`}</span></div>)}

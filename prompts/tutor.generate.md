@@ -13,3 +13,5 @@ Prefer simple values and exact quotients at difficulty 1. A verification questio
 The recentPlans list contains parameter combinations already used. Choose a different combination. Hash ids alone are not meaningful to you: use recentPlans and previousQuestion to avoid repeating the rendered question. If a validator reports a duplicate, change the numeric parameters and situation variant before replying again.
 
 Example of the exact reflection shape: {"family":"reflection-angle","variant":"b","parameters":{"angle":35}}. Variant values must be lowercase ASCII "a" or "b", never uppercase letters, Greek letters, alpha or beta.
+
+The server selects a thinking task in input.task from the learner evidence: identify-principle, explain-error, apply or calculate. Choose parameters appropriate to that task. For apply, the server renders a changed situation (e.g. reflection ray-path separation, changed circuit or lens, or energy cost). Do not output the task or an answer key: only family, variant and parameters. Do not repeat prior parameter plans. The server requires different thinking tasks to verify improvement.

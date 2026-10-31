@@ -15,6 +15,16 @@ for (const [id, label, cohort, mastery] of [[a, 'Learner A', 'physics', 0.9], [b
   fact(`learner.${id}.tutor.mastery`, 'elec:current', { logit: Math.log(mastery / (1-mastery)), mastery, confidence: 0.2, attempts: 1, correctStreak: 0, lastAt: '2026-10-31T12:00:00Z', misconceptionStrength: {} });
   fact(`learner.${id}.tutor.attempt`, `${id}:1`, { itemId: 'elec-01', conceptIds: ['elec:current'], correct: true, reasoning: id === a ? 'A-private-evidence' : 'B-private-evidence' });
 }
+fact(`learner.${a}.tutor.generated`, 'generated:smoke-task', {
+  id: 'generated:smoke-task', conceptIds: ['light:reflection'], difficulty: 1, kind: 'mcq',
+  stem: 'A laser ray makes 40 degrees with a mirror surface. Find the angle between the ray paths.',
+  options: ['100 degrees', '50 degrees', '40 degrees', '80 degrees'], answer: '100 degrees',
+  reasoningPrompt: 'Explain how reflection determines both ray directions.', explanation: 'Each ray is 50 degrees from the normal, so the angle is 100 degrees.',
+  misconceptionTags: ['m:angle-from-surface'], markAllocation: 1,
+  origin: { source: 'live', family: 'reflection-angle', parameters: { angle: 40 }, variant: 'a', task: 'apply' },
+});
+fact(`learner.${a}.tutor.session`, 'demo', { id: 'smoke-session', mode: 'practice', diagnosticIndex: 0,
+  answered: 1, itemId: 'generated:smoke-task', token: 'smoke-token', recentIds: [], feedback: null, purpose: 'verification' });
 await writeFile(file, JSON.stringify({ facts }));
 const cookie = (id, role = 'learner') => {
   const body = Buffer.from(JSON.stringify({ id, role, cohort: 'physics', expires: Date.now() + 3600000 })).toString('base64url');
@@ -33,6 +43,8 @@ try {
   for (let i = 0; i < 60; i++) { if (child.exitCode !== null) break; try { const r = await fetch(base + '/tutor', { signal: AbortSignal.timeout(1000) }); if (r.ok) { ready = true; break; } } catch {} await new Promise(r => setTimeout(r, 500)); }
   if (!ready) throw new Error(`Server not reachable: ${log}`);
   if (!(await page('/tutor')).includes('Start diagnostic')) throw new Error('New guest must start without shared progress');
+  const sessionA = await page('/tutor', cookie(a));
+  if (!sessionA.includes('Thinking task:') || !sessionA.includes('Apply in a new situation') || !sessionA.includes('laser ray')) throw new Error('Adaptive thinking task is not visible');
   const graphA = await page('/tutor/graph', cookie(a)), graphB = await page('/tutor/graph', cookie(b));
   if (!graphA.includes('90%') || graphA.includes('20%') || !graphB.includes('20%') || graphB.includes('90%')) throw new Error('Graph privacy check failed');
   const modelA = await page('/tutor/debug', cookie(a)), modelB = await page('/tutor/debug', cookie(b));
@@ -41,7 +53,7 @@ try {
   const teacher = await page('/tutor/teacher?student=' + b, cookie(randomUUID(), 'teacher'));
   if (!teacher.includes('Class evidence:') || !teacher.includes('Learner B') || teacher.includes('OtherClassHidden') || teacher.includes('simulated profile')) throw new Error('Real teacher cohort check failed');
   const retired = await fetch(base + '/api/llm', { method: 'POST' }); if (retired.status !== 404) throw new Error('Generic model proxy is exposed');
-  console.log('[smoke] New guest welcome; two learners isolated on Graph/Model; teacher gate and cohort filtering; retired proxy: passed.');
+  console.log('[smoke] New guest welcome; adaptive task rendered; two learners isolated on Graph/Model; teacher gate and cohort filtering; retired proxy: passed.');
 } finally {
   if (child.exitCode === null) child.kill(); await exited;
   if (path.dirname(path.resolve(dir)) !== parent) throw new Error('Invalid cleanup target');

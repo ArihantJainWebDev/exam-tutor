@@ -63,3 +63,8 @@ Replaced NVIDIA defaults, environment example, current setup documentation and U
 ## D-021 - Strict generated-question format
 
 Investigated the reported reflection answer: 50 degrees to surface correctly yields 40 degrees incidence. Reproduced live generation rejection on synthetic inputs: variant beta then uppercase A violated the renderer contract. Groq GPT-OSS generation now uses a strict JSON schema with lowercase variant enums, closed parameter objects and unused reflection angles; independent solvers and duplicate validation remain mandatory. Validation retries include the rejected assistant response. Notices distinguish invalid output, throttling and provider/transport failure. Five consecutive synthetic live generations and the complete isolated live transfer loop pass. No private learner history transmitted and no learner state reset.
+
+
+## D-022 - Meaningful adaptive task diversity
+
+Added four independently graded thinking tasks across the seven supported generation families: identify a principle, explain an error, apply a principle to a changed situation, and calculate. Teaching actions and recent task history choose the next kind; generated verification requires two different kinds of task, not numerical variants. Correct improvement moves practice to another concept while retaining spaced reviews. Task labels and reasoning prompts explain the change. Saved sessions remain compatible; legacy untyped checks do not fabricate diverse evidence. Live Groq check passed error-explanation followed by application with sound reasoning at 0.95 confidence for both. Reviewed-bank fallback remains explicit outside supported generation.

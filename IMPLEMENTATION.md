@@ -154,3 +154,8 @@ The active plan is ../docs/REDPEN-REAL-SOLUTION-PLAN.md (D-019). Earlier four-ph
 
 
 R1-R4 feature implementation is now complete. The earlier R1-current marker is historical. Active architecture: ../docs/REDPEN-REAL-SOLUTION-PLAN.md. See PHASE-LOG.md for real API observations and external release checks.
+
+
+## D-022 - Meaningful adaptive task diversity
+
+Added four independently graded thinking tasks across the seven supported generation families: identify a principle, explain an error, apply a principle to a changed situation, and calculate. Teaching actions and recent task history choose the next kind; generated verification requires two different kinds of task, not numerical variants. Correct improvement moves practice to another concept while retaining spaced reviews. Task labels and reasoning prompts explain the change. Saved sessions remain compatible; legacy untyped checks do not fabricate diverse evidence. Live Groq check passed error-explanation followed by application with sound reasoning at 0.95 confidence for both. Reviewed-bank fallback remains explicit outside supported generation.

@@ -8,6 +8,7 @@ import { classifyReasoning, type Classifier } from './classifier';
 import { detectedMisconception, type ReasoningAnalysis } from '@/lib/misconception';
 import { scheduleReview, dueReviews, type ReviewState } from '@/lib/srs';
 import type { Item } from '@/lib/content';
+import { chooseQuestionTask, TASK_LABELS, type QuestionTask } from '@/lib/question-task';
 import type { GeneratedQuestion } from '@/lib/generated-question';
 import { teachingDecision, type TeachingDecision, type LearningEvidence } from '@/lib/teaching';
 import { generateFollowUp, type QuestionGenerator } from './generator';
@@ -38,12 +39,13 @@ export interface SessionView {
   selectionReason?: string;
   questionSource?: 'live-generated' | 'reviewed-bank';
   notice?: string;
+  taskLabel?: string;
   learning: { conceptId: string; status: string; successfulChecks: number }[];
   reviews: { conceptId: string; label: string; dueAt: string; box: number; remediation: boolean; due: boolean }[];
 }
 export class SessionError extends Error {}
 
-/** One demo learner. All writes use the app's MemoryStore contract. Caller serialises mutations. */
+/** One isolated learner. Caller serialises mutations through the app store. */
 export function createSessionService(store: MemoryStore, content: PhysicsContent, options: { classify?: Classifier; now?: () => string; generate?: QuestionGenerator } = {}) {
   const now = options.now ?? (() => new Date().toISOString());
   const classify = options.classify ?? classifyReasoning;
@@ -75,6 +77,7 @@ export function createSessionService(store: MemoryStore, content: PhysicsContent
     return { sessionId: session?.id ?? null, mode: session?.mode ?? 'welcome', answered: session?.answered ?? 0,
       diagnosticIndex: session?.diagnosticIndex ?? 0, token: session?.token ?? null,
       purpose: session?.purpose, selectionReason: session?.selectionReason,
+      taskLabel: item && 'origin' in item ? TASK_LABELS[(item as GeneratedQuestion).origin.task ?? 'calculate'] : undefined,
       questionSource: item?.id.startsWith('generated:') ? 'live-generated' : 'reviewed-bank', notice: session?.notice,
       learning: (await store.all<LearningEvidence>('tutor.learning')).map(f => ({ conceptId: f.key, status: f.value.status, successfulChecks: f.value.successfulChecks })),
       question: item ? { id: item.id, stem: item.stem, options: item.options ?? [], reasoningPrompt: item.reasoningPrompt,
@@ -110,15 +113,19 @@ export function createSessionService(store: MemoryStore, content: PhysicsContent
     const previousLearning = (await store.latest<LearningEvidence>('tutor.learning', target))?.value;
     let decision = teachingDecision({ analysis, correct, conceptId: target, pending: previousLearning });
     if (tag) await store.put({ namespace: 'tutor.learning', key: target, at, sourceId: attemptId,
-      value: { status: 'verification-needed', tag: tag.id, lastAttemptId: attemptId, successfulChecks: 0 } satisfies LearningEvidence });
+      value: { status: 'verification-needed', tag: tag.id, lastAttemptId: attemptId, successfulChecks: 0, successfulTasks: [] } satisfies LearningEvidence });
     else if (session.purpose === 'verification' && previousLearning && analysis.source === 'live' && analysis.reasoningKind === 'sound' && (analysis.reasoningConfidence ?? analysis.confidence) >= 0.55 && correct) {
-      const checks = previousLearning.successfulChecks + 1;
-      const evidence: LearningEvidence = { ...previousLearning, successfulChecks: checks, lastAttemptId: attemptId, status: checks >= 2 ? 'improvement-observed' : 'verification-needed' };
+      const task = 'origin' in item ? (item as GeneratedQuestion).origin.task ?? 'calculate' : `bank:${item.id}`;
+      const successfulTasks = [...new Set([...(previousLearning.successfulTasks ?? []), task])];
+      const checks = successfulTasks.length;
+      const evidence: LearningEvidence = { ...previousLearning, successfulChecks: checks, successfulTasks, lastAttemptId: attemptId, status: checks >= 2 ? 'improvement-observed' : 'verification-needed' };
       await store.put({ namespace: 'tutor.learning', key: target, value: evidence, at, sourceId: attemptId });
-      if (checks >= 2) decision = { ...decision, action: 'advance', reason: 'Two different follow-ups have correct answers and coherent reasoning. Improvement is observed; spaced review will check retention.' };
+      if (checks >= 2) decision = { ...decision, action: 'advance', reason: successfulTasks.some(task => task.startsWith('bank:'))
+        ? 'Two distinct reviewed questions have correct answers and coherent reasoning. Improvement is observed; spaced review will check retention.'
+        : 'Two different kinds of task have correct answers and coherent reasoning. Improvement is observed; spaced review will check retention.' };
     }
-    else if (previousLearning?.status === 'verification-needed' && !correct) await store.put({ namespace: 'tutor.learning', key: target,
-      value: { ...previousLearning, successfulChecks: 0, lastAttemptId: attemptId }, at, sourceId: attemptId });
+    else if (previousLearning?.status === 'verification-needed' && (!correct || analysis.source === 'live' && analysis.reasoningKind !== 'sound')) await store.put({ namespace: 'tutor.learning', key: target,
+      value: { ...previousLearning, successfulChecks: 0, successfulTasks: [], lastAttemptId: attemptId }, at, sourceId: attemptId });
     const queue = await reviews(); const updatedReviews = [];
     const changes = [];
     for (const conceptId of item.conceptIds) {
@@ -135,7 +142,7 @@ export function createSessionService(store: MemoryStore, content: PhysicsContent
     if (tag) await store.put({ namespace: 'tutor.misconception', key: attemptId, at, sourceId: attemptId,
       value: { ...analysis, itemId: item.id, conceptIds: item.conceptIds.filter(id => tag.conceptIds.includes(id)) } });
     await store.put({ namespace: 'tutor.attempt', key: attemptId, at, sourceId: attemptId,
-      value: { itemId: item.id, conceptIds: item.conceptIds, answer: input.answer, reasoning: input.reasoning.trim(), correct, mode: session.mode, analysis, decision, questionSource: item.id.startsWith('generated:') ? 'live-generated' : 'reviewed-bank' } });
+      value: { itemId: item.id, conceptIds: item.conceptIds, answer: input.answer, reasoning: input.reasoning.trim(), correct, mode: session.mode, analysis, decision, questionSource: item.id.startsWith('generated:') ? 'live-generated' : 'reviewed-bank', task: 'origin' in item ? (item as GeneratedQuestion).origin.task ?? 'calculate' : undefined } });
     await save({ ...session, answered: session.answered + 1,
       recentIds: [...session.recentIds, item.id].slice(-5),
       feedback: { token: session.token, correct, answer: item.answer, selectedAnswer: input.answer, explanation: item.explanation, reasoning: input.reasoning.trim(), changes, analysis, reviews: updatedReviews, decision } });
@@ -150,19 +157,24 @@ export function createSessionService(store: MemoryStore, content: PhysicsContent
     const decision: TeachingDecision = session.feedback.decision ?? { action: 'advance', conceptId: '', targetDifficulty: 1, reason: 'Continue practice using the stored concept evidence.' };
     let intervention = decision && decision.action !== 'advance' && session.feedback.analysis?.source === 'live';
     const state = await states();
-    let item = stillDiagnostic ? diagnostics[index] : selectPractice(state, content.bank, content.graph, await selectionOptions(session.recentIds))?.item;
+    const improved = (await store.latest<LearningEvidence>('tutor.learning', decision.conceptId))?.value.status === 'improvement-observed' && decision.action === 'advance';
+    const practiceBank = improved ? content.bank.filter(i => !i.conceptIds.includes(decision.conceptId)) : content.bank;
+    let item = stillDiagnostic ? diagnostics[index] : selectPractice(state, practiceBank, content.graph, await selectionOptions(session.recentIds))?.item;
     const conceptId = intervention ? decision.conceptId : item?.conceptIds[0];
     let generated = false;
     if (conceptId && (intervention || !stillDiagnostic)) {
       const previous = await resolveItem(session.itemId);
       try {
         const previousPlans = await store.all<GeneratedQuestion>('tutor.generated');
-        const followUp = await generate({ conceptId, difficulty: intervention ? decision.targetDifficulty : item?.difficulty ?? 1,
+        const conceptPlans = previousPlans.filter(f => f.value.conceptIds.includes(conceptId));
+        const recentTasks = conceptPlans.map(f => f.value.origin.task ?? 'calculate');
+        const task = chooseQuestionTask(intervention ? decision.action : 'advance', recentTasks);
+        const followUp = await generate({ task, previousTask: recentTasks.at(-1), conceptId, difficulty: intervention ? decision.targetDifficulty : item?.difficulty ?? 1,
           goal: intervention ? decision.reason : 'Practice a weaker or unobserved concept at the calibrated difficulty.',
           misconceptionTag: intervention ? decision.tag : undefined,
           principle: intervention ? content.misconceptions.find(t => t.id === decision.tag)?.correctPrinciple : undefined,
           previousQuestion: previous?.stem ?? '', recentIds: previousPlans.map(f => f.key),
-          recentPlans: previousPlans.slice(-10).map(f => ({ family: f.value.origin.family, parameters: f.value.origin.parameters, variant: f.value.origin.variant })) });
+          recentPlans: previousPlans.slice(-10).map(f => ({ family: f.value.origin.family, parameters: f.value.origin.parameters, variant: f.value.origin.variant, task: f.value.origin.task ?? 'calculate' })) });
         if (followUp) {
           item = followUp; generated = true;
           await store.put({ namespace: 'tutor.generated', key: followUp.id, value: followUp, at: now(), sourceId: session.token });
@@ -187,7 +199,7 @@ export function createSessionService(store: MemoryStore, content: PhysicsContent
     await save({ ...session, mode: stillDiagnostic ? 'diagnostic' : 'practice', diagnosticIndex: session.mode === 'diagnostic' ? index : session.diagnosticIndex,
       itemId: item.id, token: randomUUID(), feedback: null, notice: undefined,
       purpose: intervention ? 'verification' : stillDiagnostic ? 'diagnostic' : 'practice',
-      selectionReason: `${intervention ? decision.reason : stillDiagnostic ? 'Continue gathering diagnostic evidence across the syllabus.' : 'Targeting weaker or unobserved concept evidence at a suitable difficulty.'} ${generated ? 'Live Groq plan, independently solved and validated.' : 'Reviewed question bank for this concept and difficulty.'}` });
+      selectionReason: `${intervention ? decision.reason : stillDiagnostic ? 'Continue gathering diagnostic evidence across the syllabus.' : 'Targeting weaker or unobserved concept evidence at a suitable difficulty.'} ${generated ? `${TASK_LABELS[(item as GeneratedQuestion).origin.task ?? 'calculate']}: a different thinking task, independently solved and validated from a live Groq plan.` : 'Reviewed question bank for this concept and difficulty.'}` });
     return view();
   }
   return { view, start, answer, advance };

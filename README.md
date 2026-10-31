@@ -6,7 +6,7 @@ Personal physics learning through evidence, correction and verification. The act
 
 Start a personal guest session -> answer and explain -> live Groq reasoning analysis -> targeted teaching decision -> a new validated follow-up -> evidence of improvement -> spaced review.
 
-A supported misconception triggers a correction and verification. Two distinct correct follow-ups with coherent live reasoning evidence are required before marking improvement observed. This is evidence, not proof of permanent mastery. A correct option with contradictory reasoning does not receive a normal understanding reward. Slips and unclear explanations get different teaching actions.
+A supported misconception triggers a correction and verification. Generated verification requires two different thinking tasks answered correctly with coherent live reasoning evidence before marking improvement observed. Changing only the numbers does not satisfy this requirement. This is evidence, not proof of permanent mastery. A correct option with contradictory reasoning does not receive a normal understanding reward. Slips and unclear explanations get different teaching actions.
 
 ## Run locally in real mode
 
@@ -29,7 +29,7 @@ Product requests always use the real model; MOCK_LLM does not enable a product f
 
 Groq analyses reasoning for both correct and incorrect answers, restricted to known misconceptions. Quotes must match the student's text. The server supplies vetted correction principles/hints, independently grades selected answers and computes generated answer keys.
 
-Seven generation families cover six concept areas: Ohm's law, series current/voltage, reflection angles, lens power, electrical energy and myopia correction. Generation is constrained to vetted simple/two-step formats. Advanced difficulty and unsupported concepts use the reviewed 40-item bank, labelled as such. Recent generated plans and content identities prevent repeats; rejected outputs leave progress intact and allow retry.
+Seven generation families cover six concept areas: Ohm's law, series current/voltage, reflection angles, lens power, electrical energy and myopia correction. Generation is constrained to vetted simple/two-step formats. Advanced difficulty and unsupported concepts use the reviewed 40-item bank, labelled as such. Each supported family now offers principle identification, error explanation, changed-situation application and independent calculation. The teaching policy chooses the task from conceptual confusion, uncertainty or calculation slips and avoids the last two task types for that concept. The next practice question moves to another concept after verified improvement. Recent generated plans and content identities prevent exact repeats; rejected outputs leave progress intact and allow retry.
 
 The diagnostic starts with reviewed syllabus items; targeted verification can be inserted when reasoning indicates a problem. Practice shows why a question was chosen and whether it came from a live generated plan or reviewed bank.
 
@@ -76,3 +76,9 @@ The smoke checks separate learner cookies on Graph/Model, teacher authorization 
 [PHASE-LOG.md](PHASE-LOG.md) records the observed checks and limitations; [CHANGELOG.md](CHANGELOG.md) tracks changes. [DEMO.md](DEMO.md) and [SUBMISSION.md](SUBMISSION.md) describe release evidence without claiming deployment/video/filing are complete.
 
 Stack: Next.js 15, React 19, strict TypeScript, app-owned CSS tokens/Tailwind layout, fetch-based Groq/Upstash adapters and Node tests through tsx. This repository remains independent from PS 03.
+
+## Task diversity check
+
+For reflection, a diagnosed surface/normal misconception now leads to explaining a mistaken solution, then applying reflection to the angle between laser ray paths. Numerical correctness is computed independently. The interface displays the thinking task. The same four task categories are supported by all seven generation families; unsupported concepts and advanced questions remain labelled reviewed-bank practice.
+
+Existing saved sessions continue without a reset. Older untyped verification evidence is retained in history but cannot establish diverse task completion; new qualifying tasks build that evidence.

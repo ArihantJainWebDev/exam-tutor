@@ -1,18 +1,21 @@
 import { createHash } from 'node:crypto';
 import type { Item } from './content';
+import { QUESTION_TASKS, renderQuestionTask, type QuestionTask } from './question-task';
 export const FAMILIES: Record<string, string[]> = {
   'elec:ohms-law': ['ohms-law'], 'elec:series-circuits': ['series-current', 'series-voltage'],
   'light:reflection': ['reflection-angle'], 'light:lens-power': ['lens-power'],
   'elec:power-energy': ['power-energy'], 'eye:vision-defects': ['myopia'],
 };
-export interface QuestionPlan { family: string; variant: 'a' | 'b'; parameters: Record<string, number> }
-export interface GeneratedQuestion extends Item { origin: { source: 'live'; family: string; parameters: Record<string, number>; variant: string } }
+export interface QuestionPlan { family: string; variant: 'a' | 'b'; parameters: Record<string, number>; task?: QuestionTask }
+export interface GeneratedQuestion extends Item { origin: { source: 'live'; family: string; parameters: Record<string, number>; variant: string; task?: QuestionTask; signature?: string } }
 const round = (n: number) => Math.round(n * 1000) / 1000;
 /** A model proposes parameters; vetted renderers and solvers own the actual physics and answer key. */
 export function buildGeneratedQuestion(value: unknown, conceptId: string, difficulty: 1 | 2 | 3): GeneratedQuestion {
   if (!value || typeof value !== 'object') throw new Error('Expected a question plan');
   const p = value as QuestionPlan;
   if (!FAMILIES[conceptId]?.includes(p.family) || !['a', 'b'].includes(p.variant) || !p.parameters || typeof p.parameters !== 'object' || Array.isArray(p.parameters)) throw new Error('Unsupported question family or variant');
+  const task = p.task ?? 'calculate';
+  if (!QUESTION_TASKS.includes(task)) throw new Error('Unsupported question task');
   const usedParameters: Record<string, number> = {};
   function number(key: string, min: number, max: number) {
     const v = p.parameters[key]; if (!Number.isFinite(v) || v < min || v > max || !Number.isInteger(v)) throw new Error(`Invalid parameter ${key}: expected integer ${min}–${max}`); usedParameters[key] = v; return v;
@@ -68,14 +71,17 @@ export function buildGeneratedQuestion(value: unknown, conceptId: string, diffic
     }
     default: throw new Error('Unsupported family');
   }
-  const id = `generated:${createHash('sha256').update(JSON.stringify({ stem, answer, conceptId })).digest('hex').slice(0, 24)}`;
   const numbers = [...new Set([answer, ...distractors.map(round), answer + 2, round(answer / 3), answer + 5])].slice(0, 4);
-  const options = numbers.map(n => `${n} ${unit}`); const shift = parseInt(id.slice(-2), 16) % options.length;
-  const shuffled = [...options.slice(shift), ...options.slice(0, shift)];
-  return { id, conceptIds: [conceptId], difficulty, kind: 'mcq', stem, options: shuffled, answer: `${answer} ${unit}`,
-    reasoningPrompt: 'Why does this principle apply in this situation? Explain your reasoning.', explanation, misconceptionTags,
+  const rendered = renderQuestionTask({ family: p.family, variant: p.variant, parameters: usedParameters, task,
+    base: { stem, answer: `${answer} ${unit}`, options: numbers.map(n => `${n} ${unit}`), explanation,
+      reasoningPrompt: 'Why does this principle apply in this situation? Explain your reasoning.' } });
+  const id = `generated:${createHash('sha256').update(JSON.stringify({ stem: rendered.stem, answer: rendered.answer, conceptId })).digest('hex').slice(0, 24)}`;
+  const options = rendered.options!;
+  const shift = parseInt(id.slice(-2), 16) % options.length;
+  return { id, conceptIds: [conceptId], difficulty, kind: 'mcq', ...rendered,
+    options: [...options.slice(shift), ...options.slice(0, shift)], misconceptionTags,
     markAllocation: difficulty === 1 ? 1 : difficulty === 2 ? 2 : 3,
-    origin: { source: 'live', family: p.family, parameters: usedParameters, variant: p.variant } };
+    origin: { source: 'live', family: p.family, parameters: usedParameters, variant: p.variant, task, signature: `${p.family}:${task}` } };
 }
 
 

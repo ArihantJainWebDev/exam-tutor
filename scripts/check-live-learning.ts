@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createMemoryStore } from '../src/platform/store/memory';
 import { loadPhysicsContent } from '../src/lib/content.server';
 import { createSessionService } from '../src/app/tutor/session-service';
-import type { Item } from '../src/lib/content';
+import type { GeneratedQuestion } from '../src/lib/generated-question';
 import { generateFollowUp } from '../src/app/tutor/generator';
 try { process.loadEnvFile('.env.local'); } catch { /* deployment environment */ }
 const store = createMemoryStore();
@@ -22,21 +22,23 @@ assert.equal(view.feedback?.analysis?.source, 'live');
 assert.equal(view.feedback?.analysis?.tag, 'm:angle-from-surface');
 console.log('[live] Wrong reasoning diagnosed with verified quote.');
 let successes = 0;
+const tasks = new Set<string>();
 for (let check = 1; check <= 3 && successes < 2; check++) {
   const previousToken = view.token;
   view = await service.advance(view.token);
   assert.notEqual(view.token, previousToken, view.notice ?? 'Expected a genuinely new question');
   assert.equal(view.feedback, null, 'A previous response must never count as a new check');
   assert.equal(view.questionSource, 'live-generated', view.notice);
-  const question = (await store.latest<Item>('tutor.generated', view.question!.id))!.value;
+  const question = (await store.latest<GeneratedQuestion>('tutor.generated', view.question!.id))!.value;
   view = await service.answer({ token: view.token, answer: String(question.answer), reasoning: question.explanation });
   assert.equal(view.feedback?.analysis?.source, 'live', JSON.stringify(view.feedback?.analysis));
   const analysis = view.feedback!.analysis!;
   const qualified = analysis.reasoningKind === 'sound' && (analysis.reasoningConfidence ?? analysis.confidence) >= 0.55;
-  if (qualified) successes++;
+  if (qualified) { tasks.add(question.origin.task ?? 'calculate'); successes = tasks.size; }
   assert.equal(view.learning[0].successfulChecks, successes);
-  console.log(`[live] Fresh question ${check}: reasoning=${analysis.reasoningKind}, reasoning confidence=${analysis.reasoningConfidence ?? analysis.confidence}, verified checks=${successes}.`);
+  console.log(`[live] Fresh question ${check}: task=${question.origin.task}, reasoning=${analysis.reasoningKind}, reasoning confidence=${analysis.reasoningConfidence ?? analysis.confidence}, verified checks=${successes}.`);
 }
+assert.equal(tasks.size, 2, 'Verification must use different thinking tasks');
 assert.equal(successes, 2, 'Live model did not provide enough coherent evidence; do not claim improvement.');
 assert.equal(view.learning[0].status, 'improvement-observed');
 console.log('[live] Full correction/transfer loop passed. No user files or fixture outputs used.');

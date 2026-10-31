@@ -5,6 +5,7 @@ export interface LearningEvidence {
   tag: string | null;
   lastAttemptId: string;
   successfulChecks: number;
+  successfulTasks?: string[];
 }
 export interface TeachingDecision {
   action: 'correct-misconception' | 'check-calculation' | 'clarify' | 'verify-understanding' | 'advance';
