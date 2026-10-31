@@ -2,9 +2,13 @@
 
 **An adaptive physics tutor that responds to how a learner reasons, not only which option they select.** Redpen identifies a likely misconception, chooses a suitable next teaching task, checks understanding in a different way, and records the evidence behind its learning estimates.
 
-Redpen is the PS-02 submission, **Adaptive exam-prep tutor with a learner model**, for The Product Space AI Hackathon. It focuses on a Class 10 physics syllabus and is an independent app in this project folder.
+## Overview
 
-**Live deployment:** [redpen-three.vercel.app](https://redpen-three.vercel.app/)
+Redpen is the PS-02 submission, **Adaptive exam-prep tutor with a learner model**, for The Product Space AI Hackathon. It focuses on Class 10 physics and adapts to the evidence in each learner’s answers and explanations.
+
+### Live demo
+
+**[Open Redpen →](https://redpen-three.vercel.app/)**
 
 ## Why Redpen
 
