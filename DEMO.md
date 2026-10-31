@@ -1,3 +1,5 @@
+Current status: diagnostic has eight questions; teacher cohort remains Phase 4. Historical percentages/timings below are illustrative. Seed resets learner evidence; fixtures must be disclosed.
+
 # PS 02 demo — 3 minutes
 
 One continuous screen recording, no cuts, narration dictated in Wispr over the good take. Seed with `npm run seed`
@@ -49,3 +51,15 @@ should be readable in 90 seconds, because they are the answer to "is this a wrap
 Diagnostic as a separate mode (T6) → chapters beyond electricity + light → `/tutor/graph` as a standalone page (the
 margin strip already carries it) → dashboard drill-down. Never cut the mastery update, the targeted next question, or
 the misconception card — the floor condition in D-009 says a real loop beats a finished-looking fake.
+
+## Phase 3 browser check (without modifying existing progress)
+
+Continue to a new question in MOCK_LLM=1. Submit an incorrect option with reasoning. You should see feedback and a scheduled review; arbitrary reasoning gets a conservative no-finding fixture response. Open Scheduled concepts to inspect dates and review boxes. Refresh and verify feedback, source badge and schedule persist.
+
+For a reproducible tagged example using a fresh diagnostic, stop server, run npm run seed (erases demo progress), restart in mock mode and start diagnostic. Answer the first question, then on question two (light-01), choose 30 degrees and paste this exactly:
+
+The ray hits the mirror at 30 degrees from the surface, so the angle of incidence is 30 degrees.
+
+Expected: fixture badge; exact quoted evidence; correction that incidence is measured from the normal; extra mastery penalty; a remediation review scheduled one day later. /tutor/debug should contain tutor.misconception and tutor.srs records. No need to wait a day to verify the computed timestamp; automated tests exercise due-time behavior with an injected clock.
+
+The arithmetic-slip input for elec-03 in mocks/tutor.classify.cases.json must return no diagnosis while still reducing mastery and scheduling review. Do not claim that arbitrary fixture text proves a student's reasoning correct.

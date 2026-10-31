@@ -82,3 +82,11 @@ concept, the misconception card quotes the student, the SRS queue moved, and the
 Set MOCK_LLM=1, run npm run dev and open /tutor. Start the eight-question diagnostic or direct practice, choose an answer, explain why, submit and continue. Refresh to resume. /tutor/graph and /tutor/debug show saved evidence.
 
 This phase requires no model connection. Questions are selected from the authored bank; novel question generation is not implemented. There is one shared demo learner. To reset, stop the server, run npm run seed and restart it. Browser interaction acceptance is pending; service-level and build checks pass.
+
+## Phase 3: reasoning feedback and revision
+
+Wrong answers with relevant taxonomy candidates are analysed through the model gateway. Supported diagnoses quote your reasoning and add concept-specific remediation. Correct answers skip classification. Every answered concept gets a persisted review schedule; due reviews influence practice selection, and flagged misconceptions prefer easier follow-ups.
+
+MOCK_LLM=1 replays exact scripted examples listed in mocks/tutor.classify.cases.json. Other text conservatively yields no diagnosis. Fixture use and live fallback are disclosed in feedback. Arbitrary reasoning needs a working live endpoint (still unverified here). Feedback saved before Phase 3 is not retroactively analysed; submit a new answer to exercise this feature.
+
+See PHASE-LOG.md for checks and the browser walkthrough. Stop the server before npm run seed if you want to erase demo progress; no reset is required to continue an existing session.

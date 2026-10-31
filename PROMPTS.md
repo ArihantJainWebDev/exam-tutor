@@ -128,3 +128,13 @@ the strongest single piece of "this is a real system" evidence available in the 
 Open-ended misconception text. A mastery number that is a React `useState` counter. A dashboard with literal values.
 A "recommended next question" that ignores which concept just dropped. A chat interface. Generic card UI in the tutor's
 own colours, or anything that makes `/tutor` look like a sibling of `/meetings`.
+
+## Phase 3 implementation notes
+
+The canonical runtime system prompt is prompts/tutor.classify.md. Classifier IO lives in src/app/tutor/classifier.ts; src/lib/misconception.ts contains only pure validation and candidate filtering. All calls use callLlm.
+
+mocks/tutor.classify.json is a conservative none response. mocks/tutor.classify.cases.json maps an exact item id plus trimmed scripted reasoning to a named fixture variant for consumed current, surface-angle confusion, refraction or the arithmetic slip. These variants share the same system prompt. Mock mode recognises only these exact scripted inputs; arbitrary reasoning gets no diagnosis. This is fixture replay, not offline AI. The fixture source and live-failure fallback are visible in feedback and retained with the attempt.
+
+Correct answers or questions with no relevant taxonomy candidates skip the model. Wrong answers use only intersecting concept tags. Confidence >= 0.55 is required to fire. Quote must be an exact substring with at most 25 words; principle must match the taxonomy. Both live and mock results are checked. An unavailable classifier does not stop grading or schedule updates.
+
+Live provider connectivity remains unverified; request/parse/retry/fallback paths are exercised with controlled responses. Do not describe fixture replays as live reasoning analysis.

@@ -1,0 +1,7 @@
+{
+  "tag": "m:angle-from-surface",
+  "confidence": 0.95,
+  "quote": "the angle of incidence is 30 degrees",
+  "correctPrinciple": "Angles of incidence and reflection are measured from the normal.",
+  "remediationHint": "Draw a perpendicular to the mirror before measuring the angle."
+}

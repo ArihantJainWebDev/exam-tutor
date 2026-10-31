@@ -130,6 +130,8 @@ test('file-backed session and mastery survive a fresh service/store instance', a
     const restored = await createSessionService(createFileStore(file), c).view();
     assert.equal(restored.answered, 1); assert.equal(restored.feedback?.selectedAnswer, item.answer);
     assert.ok(restored.mastery.some(n => n.attempts === 1));
+    assert.equal(restored.reviews.length, item.conceptIds.length);
+    assert.equal(restored.feedback?.analysis?.source, 'not-needed');
   } finally {
     assert.equal(path.dirname(path.resolve(dir)), parent, 'cleanup stays inside the app data directory');
     await rm(dir, { recursive: true, force: true });

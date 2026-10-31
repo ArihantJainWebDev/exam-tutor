@@ -74,3 +74,44 @@ Status: implemented; browser interaction verification pending. Phase 3 not start
 4. Finish eight diagnostic questions; check transition into practice.
 5. Open /tutor/graph and /tutor/debug; observed concepts have mastery, version and provenance; unobserved concepts remain no evidence.
 6. Restart server and check resume. Check narrow viewport and console errors.
+
+## Phase 3 - reasoning analysis and spaced review - 2026-10-31
+
+Status: implemented; browser acceptance pending. Next: Phase 4 (not started).
+
+Phase 2 follow-up: user confirmed eight diagnostic questions switched into continued practice. This verifies the basic browser transition, not all refresh/mobile/selection scenarios.
+
+### Delivered
+
+- Pure candidate filtering and classification validation; server adapter calls the named tutor.classify prompt through callLlm.
+- Only wrong answers with relevant taxonomy candidates invoke the model. Exact quoted substring (max 25 words), allowed tag, bounded confidence and exact taxonomy principle required. Correct answers and questions without relevant tags skip classification.
+- RedPenCard quotes reasoning, explains the vetted principle/hint and shows response source. Confidence below 0.55 makes no diagnosis or additional penalty. Arithmetic slips can remain none.
+- Persisted tutor.misconception evidence plus source metadata on attempts/feedback; penalties affect only concepts intersecting the diagnosed taxonomy tag.
+- Pure Leitner scheduling stored in tutor.srs by concept with attempt provenance. Intervals 1/3/7/21/60 days: correct and mastery >0.6 promotes; other correct holds; wrong drops two boxes; misconception resets to box zero/remediation. Correct clears remediation.
+- Current/upcoming reviews shown in Session, dates in IST. Due concepts receive the existing scoring bonus; flagged targets prefer band one. Recent-item exclusions still apply.
+- Redpen-only platform change: optional named fixture variant for mocks/cache; live system prompt stays shared. No other app edited.
+
+### Fixture and compatibility behavior
+
+- mocks/tutor.classify.cases.json registers four exact item/reasoning pairs and their fixtures. Default fixture returns none for unknown inputs. This is deterministic replay, not general offline analysis.
+- Invalid live output retries once then uses the contextual fixture when available. Fixtures are revalidated against current reasoning/candidates. Mock/fallback badges appear even on no-finding responses.
+- Total classifier failure still saves grading, normal mastery change and revision schedule without a diagnosis.
+- Existing sessions continue. Previous answers are not retroactively classified/scheduled. Submit a new answer for Phase 3 behavior; old feedback may lack optional analysis/review fields.
+- Per-process/file-store limitations from Phase 2 remain. No notifications are sent. Teacher analytics and novel question generation remain unimplemented.
+
+### Verification
+
+- Content validation passes (24 concepts, 40 items, 12 tags); typecheck passes.
+- 38/38 tests pass: scripted cases and arithmetic slip, unknown/correct reasoning, forged quotes/tags/principles, confidence threshold, controlled live parsing, validated fixture fallback, SRS transitions and time boundaries, due/remediation ranking, persisted sources/schedules, duplicate handling, unavailable analysis, and multi-concept attribution. Existing disk-restart test verifies SRS and source fields.
+- Production build passes after elevated retry. First attempt hit Windows EPERM creating a generated .next/types folder; retry compiled/generated pages successfully.
+- Controlled responses verify gateway integration, not real NVIDIA connectivity. No real provider call was made.
+- Browser interaction/mobile verification pending. See DEMO.md's Phase 3 browser check; reflection is diagnostic question two after an optional user-run reset.
+
+### Browser expectations
+
+In a fresh mock diagnostic, answer light-01 incorrectly with the exact surface-angle reasoning from the fixture registry. Expect a fixture-labelled quote/correction, concept-specific penalty and a next-day remediation review. Arbitrary text must not invent a diagnosis. Refresh must retain feedback/source/schedule. /tutor/debug should show tutor.srs and, only for supported diagnoses, tutor.misconception.
+
+
+### User browser evidence - Phase 3
+
+User screenshots confirm the mock-mode reflection diagnosis: exact reasoning quote, normal-based correction, fixture disclosure, mastery moving from 50% to about 37%, and next-day remediation review. Two scheduled concepts render. The Model page shows both saved attempts, correct-answer classification skipped, reflection misconception strength and source-linked mastery records. This verifies the scripted browser path; screenshots do not establish refresh/restart persistence, arbitrary live reasoning, mobile behavior or console cleanliness. Model page length is expected because it exposes raw records; no redesign requested.

@@ -1,5 +1,15 @@
 # Redpen changelog
 
+## 2026-10-31 - Phase 3 implemented
+
+- Added closed-set reasoning analysis through callLlm, exact-quote validation and taxonomy-backed feedback.
+- Added four scripted fixture variants plus conservative default; disclose live, mock, fallback and unavailable analysis.
+- Apply supported misconception penalties only to relevant concepts and persist source/evidence.
+- Added per-concept Leitner review schedules, visible queue and due/remediation selection hooks.
+- Old sessions remain usable; no automatic reset or retrospective classification.
+- 38 tests, typecheck, content validation and production build pass. Build required elevated filesystem access after a Windows EPERM.
+- Phase 3 browser interaction and actual NVIDIA access remain unverified. Teacher dashboard remains Phase 4.
+
 ## 2026-10-31 — Phase 2 implemented
 
 - Added eight-item diagnostic, bounded Rasch mastery, adaptive bank selection and server-owned grading.
@@ -22,3 +32,6 @@
 
 - User screenshots confirm all four mock-mode pages render with populated concepts and expected empty states.
 - Fixed the question preview's hardcoded mark allocation and switched it to the validated content loader; browser confirmation of the corrected mark remains pending.
+
+
+Phase 3 browser follow-up: user screenshots confirm fixture-labelled misconception feedback, quoted evidence, mastery change, review dates and saved model records. Live NVIDIA access and refresh/mobile checks remain unverified.

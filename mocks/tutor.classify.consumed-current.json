@@ -1,0 +1,7 @@
+{
+  "tag": "m:current-consumed",
+  "confidence": 0.95,
+  "quote": "The current is used up by the first bulb",
+  "correctPrinciple": "In a steady series circuit, the same current flows through every component; energy is transferred, not current consumed.",
+  "remediationHint": "Compare charge passing two points in the same series loop each second."
+}

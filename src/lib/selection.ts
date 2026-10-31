@@ -4,12 +4,13 @@ export interface SelectionOptions {
   now: string;
   recentIds: string[];
   dueConceptIds?: string[];
+  remediationConceptIds?: string[];
 }
 export function rankQuestions(state: Record<string, State>, bank: Item[], graph: Concept[], opts: SelectionOptions) {
   return bank.filter(i => !opts.recentIds.includes(i.id)).map(item => {
     const conceptId = [...item.conceptIds].sort((a, b) => (state[a]?.mastery ?? 0.3) - (state[b]?.mastery ?? 0.3))[0];
     const mastery = state[conceptId]?.mastery ?? 0.3;
-    const band = mastery < 0.35 ? 1 : mastery <= 0.65 ? 2 : 3;
+    const band = opts.remediationConceptIds?.includes(conceptId) ? 1 : mastery < 0.35 ? 1 : mastery <= 0.65 ? 2 : 3;
     const readiness = item.conceptIds.every(id => graph.find(c => c.id === id)?.prereqs.every(p => (state[p]?.mastery ?? 0) >= 0.5)) ? 1 : 0;
     const due = item.conceptIds.some(id => opts.dueConceptIds?.includes(id)) ? 0.3 : 0;
     const tagBonus = item.misconceptionTags.some(tag => item.conceptIds.some(id => (state[id]?.misconceptionStrength[tag] ?? 0) > 0)) ? 0.25 : 0;

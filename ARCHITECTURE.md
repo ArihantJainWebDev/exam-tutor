@@ -184,3 +184,11 @@ Layout language is a centred document, which is what keeps it visually unrelated
 the other repo, `ps-02-exam-tutor/`, `content/physics/**`, `prompts/tutor.*.md`, `mocks/tutor.*.json`,
 `src/styles/tokens.css`, `src/app/**`. Platform changes inside this repo are allowed but must be logged in
 `../docs/STATE.md`. Never touch the other repo, `ps-03-meeting-execution/`.
+
+## Phase 3 implementation clarification (D-016)
+
+IO orchestrators live in src/app/tutor/classifier.ts and session-service.ts; pure classification validation and Leitner rules live in src/lib. The Redpen-only LLM gateway accepts an optional mockVariant suffix, used for fixture selection/caching; live prompt selection remains tutor.classify. No other app platform was changed.
+
+SRS is stored in tutor.srs by concept, with source attempt provenance. Intervals are 1/3/7/21/60 days (24-hour durations), displayed in IST. Correct and updated mastery >0.6 promotes; otherwise correct holds; wrong drops two boxes; misconception resets to box zero with remediation. Thus a wrong answer from box four moves to box two (7 days), not always tomorrow. A misconception always schedules tomorrow. Due means dueAt <= current server time. Correct evidence clears the remediation flag. Selection keeps its documented weights and uses band one for a flagged remediation target while recent-item exclusions still apply.
+
+Diagnoses penalise only item concepts also covered by the selected taxonomy tag. Source metadata survives persistence and refresh. No diagnosis is made solely from choosing a tagged distractor.

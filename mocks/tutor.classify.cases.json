@@ -1,0 +1,22 @@
+[
+  {
+    "itemId": "elec-05",
+    "variant": "consumed-current",
+    "reasoning": "The current is used up by the first bulb so the second one gets less current and glows dimmer."
+  },
+  {
+    "itemId": "light-01",
+    "variant": "surface-angle",
+    "reasoning": "The ray hits the mirror at 30 degrees from the surface, so the angle of incidence is 30 degrees."
+  },
+  {
+    "itemId": "light-04",
+    "variant": "refraction",
+    "reasoning": "When light goes from air into glass it speeds up so it bends away from the normal."
+  },
+  {
+    "itemId": "elec-03",
+    "variant": "arithmetic-slip",
+    "reasoning": "V is 2 V and R is 0.5 \u03a9, so I = V \u00f7 R = 2 \u00f7 0.5 = 1 A."
+  }
+]

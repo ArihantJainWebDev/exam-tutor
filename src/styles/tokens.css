@@ -142,6 +142,11 @@ body {
 .btn:disabled { opacity: 0.55; cursor: wait; }
 .answer-feedback { padding: 16px 0; border-bottom: 2px solid var(--p-accent); }
 .answer-feedback h2, .session-error { color: var(--p-accent); }
+.redpen-card { border-left: 3px solid var(--p-accent); padding: 4px 16px; margin: 20px 0; }
+.redpen-card h3 { color: var(--p-accent); margin: 8px 0; }
+.redpen-card blockquote { margin: 10px 0; overflow-wrap: anywhere; }
+.review-queue { border-top: 1px solid var(--p-rule); margin-top: 24px; }
+.review-queue summary { cursor: pointer; color: var(--p-ballpoint); }
 .mastery-strip { margin-top: 32px; border-top: 1px solid var(--p-rule); }
 .mastery-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--p-rule); }
 @media (max-width: 560px) {

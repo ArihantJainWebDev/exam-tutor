@@ -8,7 +8,7 @@ This table supersedes the historical hour-based scheduling below. T0–T7 remain
 |---|---|---|
 | 1 | T0: 24-concept graph, 40-item bank, 12 misconceptions, validator, typed loader and content review | implemented; checks recorded in PHASE-LOG.md |
 | 2 | T1/T2/T6: mastery, adaptive selection, diagnostic and persisted student answer loop | implemented; browser acceptance pending |
-| 3 | T4/T3: reasoning-based misconception feedback and spaced revision | pending |
+| 3 | T4/T3: reasoning-based misconception feedback and spaced revision | implemented; browser acceptance pending |
 | 4 | T5/T7: teacher dashboard, checks, deployment and submission artifacts | pending |
 
 Phase logs: [PHASE-LOG.md](PHASE-LOG.md). Changes: [CHANGELOG.md](CHANGELOG.md).
@@ -47,7 +47,7 @@ Build
 **Gate:** validator green; 24 concepts; ≥40 items; ≥8 items belong to the two chapters the demo uses.
 **Exit:** the file exists and loads into the store via `npm run seed`. This is the phase to finish before UI exists.
 
-## T1 · Learner model — H2:00–2:30 — `STATUS: pending` · ladder 1 · kill check 5
+## T1 - Learner model - complete (Phase 2)
 
 Files: `lib/mastery.ts`, `lib/mastery.spec.ts`
 
@@ -59,7 +59,7 @@ convergence, monotonicity). Multi-concept split `ALPHA / conceptIds.length`.
 **Exit:** the same functions run from a `node -e` snippet producing a sensible trajectory over 10 simulated answers —
 this is what makes the demo claim safe even if the UI slips.
 
-## T2 · Targeted selection + calibration — H2:30–3:30 — `STATUS: pending` · ladder 1 · kill check 6
+## T2 - Adaptive selection - implemented; basic browser transition confirmed
 
 Files: `lib/selection.ts`, `lib/selection.spec.ts`, `components/QuestionCard.tsx`, `components/MasteryStrip.tsx`,
 `/tutor` route
@@ -77,7 +77,7 @@ Build
 **Gate:** both selection tests pass. **Exit:** answering wrong on screen changes a visible number and the next
 question cites the concept you just lost. This is the loop; it must exist before anything else gets built.
 
-## T3 · Spaced repetition — H3:30–4:15 — `STATUS: pending` · ladder 3
+## T3 - Spaced repetition - implemented; browser acceptance pending
 
 `lib/srs.ts`: Leitner transitions `[1,3,7,21,60]`, wrong ⇒ drop two boxes, misconception ⇒ box 0 + `remediation` flag,
 `due(now)`. Render as "revision due today" under the active question, and expose `srsDue` into T2's scorer.
@@ -87,7 +87,7 @@ Test: one correct answer at box 0 ⇒ `due(now+2d)` empty, `due(now+7d)` contain
 Cuttable at H5:45 only if T4 has slipped — T2 already consumes the `srsDue` term, so removing the UI line is a
 30-second cut, not a refactor.
 
-## T4 · Misconception detection — H4:15–5:15 — `STATUS: pending` · ladder 2 · kill check 7
+## T4 - Misconception feedback - implemented; browser acceptance pending
 
 Files: `lib/misconception.ts`, `tutor.classify` prompt + mock, `components/RedPenCard.tsx`
 
@@ -120,7 +120,7 @@ mastery < 0.5 on ≥60% of their concepts — proves the model tracks reality ra
 **Gate:** heatmap renders with no hardcoded numbers anywhere in the component tree. **Exit:** if T2/T4 are not green,
 this phase is skipped entirely rather than mocked (floor condition).
 
-## T6 · Diagnostic — only if H5:45 arrives with T1–T4 green — `STATUS: optional`
+## T6 - Diagnostic - complete (Phase 2)
 
 `lib/diagnostic.ts` running 8 items through the same `updateMastery` with `ALPHA * 1.4`, plus a start-screen entry.
 If it doesn't fit, label the first five session questions as the check and delete the separate mode — the model path is
@@ -140,3 +140,6 @@ dictated, screenshots unedited. No new features, no "one more concept".
 - If a phase overruns, cut from the bottom of the ladder and log it. Do not let T5 cannibalise T4.
 
 Phase 2 uses server actions and a serialised session service. Tests live in test/ so npm test discovers them. Classification and SRS remain Phase 3; the old T2 mock-classification instruction is superseded by the four-phase plan. See PHASE-LOG.md for verification and limitations.
+
+
+Phase 3 classifier/SRS are implemented. See PHASE-LOG.md for checks, fixture behavior and pending browser acceptance. D-016 records the scoped Redpen platform mockVariant extension.

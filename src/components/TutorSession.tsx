@@ -2,6 +2,9 @@
 import { useState, useTransition } from 'react';
 import type { SessionView } from '@/app/tutor/session-service';
 import { startSession, submitAnswer, nextItem } from '@/app/tutor/actions';
+import { RedPenCard } from './RedPenCard';
+
+const reviewDate = (value: string) => new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' }).format(new Date(value));
 
 export function TutorSession({ initial }: { initial: SessionView }) {
   const [view, setView] = useState(initial);
@@ -48,12 +51,24 @@ export function TutorSession({ initial }: { initial: SessionView }) {
         <h2>{feedback.correct ? 'Correct' : 'Let’s review this answer'}</h2>
         <p>Answer: <strong>{feedback.answer}</strong></p><p>{feedback.explanation}</p>
         {feedback.changes.map(c => <p className="mono" key={c.conceptId}>{c.conceptId}: {Math.round(c.before * 100)}% → {Math.round(c.after * 100)}%</p>)}
-        <p className="mono">First answers start from a neutral 50% prior, not a measured score. Reasoning is saved; misconception analysis arrives in Phase 3.</p>
+        <p className="mono">First answers start from a neutral 50% prior. Mastery and model confidence are estimates.</p>
+        {feedback.analysis && <RedPenCard analysis={feedback.analysis} />}
+        {feedback.reviews?.map(r => <p className="mono" key={r.conceptId}>Review {r.conceptId}: {reviewDate(r.dueAt)} IST{r.remediation ? ' · easier follow-up prioritised' : ''}</p>)}
         <button className="btn" disabled={pending} onClick={() => run(() => nextItem(view.token!))}>{pending ? 'Loading…' : view.mode === 'diagnostic' && view.diagnosticIndex === 7 ? 'Finish diagnostic and practice' : 'Next question'}</button>
       </section>}
     </>}
     {error && <p role="alert" className="session-error">{error}</p>}
     {pending && <p role="status" className="mono">Saving your progress…</p>}
+    <section className="review-queue" aria-label="Spaced revision">
+      <h2>Spaced revision</h2>
+      <p>{view.reviews.filter(r => r.due).length} concepts due now.</p>
+      {view.reviews.length === 0 ? <p className="mono">Answer a question to schedule its concepts for revision.</p> : <>
+        <p className="mono">Next review: {reviewDate(view.reviews[0].dueAt)} IST. Due concepts receive priority in practice.</p>
+        <details><summary>Scheduled concepts ({view.reviews.length})</summary>
+          {view.reviews.map(r => <div className="mastery-row" key={r.conceptId}><span>{r.label}{r.remediation ? ' · revisit the principle' : ''}</span><span className="mono">{r.due ? 'Due now' : reviewDate(r.dueAt) + ' IST'} · box {r.box + 1}/5</span></div>)}
+        </details>
+      </>}
+    </section>
     <section aria-label="Concept mastery" className="mastery-strip"><h2>Your concept evidence</h2>
       <p className="mono">Unanswered concepts have no estimate. Confidence grows over the first five answers per concept.</p>
       {view.mastery.map(c => <div key={c.conceptId} className="mastery-row"><span>{c.label}</span><span className="mono">{c.mastery === null ? 'no evidence' : `${Math.round(c.mastery * 100)}% · ${c.attempts} answers · confidence ${Math.round(c.confidence * 100)}%`}</span></div>)}

@@ -9,6 +9,8 @@ export interface LlmRequest {
   /** Returns an error string when the parsed payload is invalid, or null when it is acceptable. */
   validate?: (value: unknown) => string | null;
   timeoutMs?: number;
+  /** Optional fixture suffix; the live prompt stays unchanged. */
+  mockVariant?: string;
   /** Test hooks only — product code never passes these. */
   cwd?: string;
   fetchImpl?: typeof fetch;
@@ -56,11 +58,13 @@ function parseJsonPayload(content: string): unknown {
 export async function callLlm<T>(req: LlmRequest): Promise<LlmResult<T>> {
   const cwd = req.cwd ?? process.cwd();
   const timeoutMs = req.timeoutMs ?? 20000;
-  const mock = await readMock<T>(cwd, req.prompt);
+  if (req.mockVariant && !/^[a-z0-9-]+$/.test(req.mockVariant)) throw new LlmError('Invalid mock variant.');
+  const mockName = req.mockVariant ? `${req.prompt}.${req.mockVariant}` : req.prompt;
+  const mock = await readMock<T>(cwd, mockName);
 
   if (process.env.MOCK_LLM === '1') {
     if (mock === null) {
-      throw new LlmError(`MOCK_LLM=1 but mocks/${req.prompt}.json is missing. Register a fixture for every prompt.`);
+      throw new LlmError(`MOCK_LLM=1 but mocks/${mockName}.json is missing. Register a fixture for every prompt.`);
     }
     return { data: mock, source: 'mock', attempts: 0 };
   }
@@ -107,7 +111,7 @@ export async function callLlm<T>(req: LlmRequest): Promise<LlmResult<T>> {
       if (process.env.CACHE_LLM === '1') {
         // Best-effort fixture capture (dev only; read-only filesystems just skip it).
         await mkdir(path.join(cwd, 'mocks'), { recursive: true })
-          .then(() => writeFile(path.join(cwd, 'mocks', `${req.prompt}.json`), JSON.stringify(parsed, null, 2)))
+          .then(() => writeFile(path.join(cwd, 'mocks', `${mockName}.json`), JSON.stringify(parsed, null, 2)))
           .catch(() => undefined);
       }
       return { data: parsed as T, source: 'live', attempts: attempt };
