@@ -15,6 +15,8 @@ From the project's Storage or Marketplace area, add **Upstash for Redis** and co
 | `UPSTASH_REDIS_REST_URL` | `KV_REST_API_URL` |
 | `UPSTASH_REDIS_REST_TOKEN` | `KV_REST_API_TOKEN` |
 
+The Vercel Redis integration may instead provide `REDIS_KV_REST_API_URL` and `REDIS_KV_REST_API_TOKEN`. Redpen now reads that pair directly as well; you do not need to duplicate either secret.
+
 Use a write-capable REST token, not a read-only token or just a `REDIS_URL` TCP connection string. Never use a `NEXT_PUBLIC_` prefix. No Redis SDK is needed: the adapter uses the REST API.
 
 Set `REDPEN_STORE=redis`. Without a REST URL and token, Redpen deliberately refuses to run on Vercel rather than pretending its local files are persistent. For a local-only run, keep the default `auto` and omit Redis credentials, or use `file`.

@@ -36,7 +36,7 @@ Four supplied screenshots confirm the session preview (24 concepts/40 items, zer
 Screenshot review found the session preview hardcoded a three-mark label for the one-mark first question. Corrected it to read `markAllocation` from the validated content loader. The updated mark needs a browser refresh check; the supplied screenshot shows the earlier value. This follow-up does not implement Phase 2.
 
 
-## Phase 2 — diagnostic and adaptive tutor — 2026-10-31
+## Phase 2 ï¿½ diagnostic and adaptive tutor ï¿½ 2026-10-31
 
 Status: implemented; browser interaction verification pending. Phase 3 not started.
 
@@ -193,3 +193,5 @@ D-021 verification: 66 tests and typecheck pass; isolated production build passe
 Added four independently graded thinking tasks across the seven supported generation families: identify a principle, explain an error, apply a principle to a changed situation, and calculate. Teaching actions and recent task history choose the next kind; generated verification requires two different kinds of task, not numerical variants. Correct improvement moves practice to another concept while retaining spaced reviews. Task labels and reasoning prompts explain the change. Saved sessions remain compatible; legacy untyped checks do not fabricate diverse evidence. Live Groq check passed error-explanation followed by application with sound reasoning at 0.95 confidence for both. Reviewed-bank fallback remains explicit outside supported generation.
 
 D-022 verification: 71/71 tests pass, typecheck passes, isolated production build and production HTTP smoke pass (including visible thinking-task label and learner/teacher isolation). Genuine isolated Groq loop passes explain-error -> apply with two sound reasoning checks. No saved learner progress reset. Final interactive browser acceptance remains with the user.
+
+D-024: Submission documentation package added: README, SRS, System Architecture, Testing & Validation. Existing test/live results are reported with limits; README calls for rerunning validation after the later Vercel Redis alias edit. No test commands run for documentation-only work.

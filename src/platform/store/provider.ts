@@ -8,8 +8,8 @@ export function getStore(filePath?: string): MemoryStore {
   if (filePath) return getFileStore(filePath);
   const mode = process.env.REDPEN_STORE ?? 'auto';
   if (!['auto', 'file', 'redis'].includes(mode)) throw new Error('REDPEN_STORE must be auto, file or redis.');
-  const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
+  const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL ?? process.env.REDIS_KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN ?? process.env.REDIS_KV_REST_API_TOKEN;
   if (mode !== 'file' && url && token) {
     const key = process.env.REDPEN_REDIS_KEY ?? 'redpen:demo:v1';
     globalStores.__redpenRedisStores ??= new Map();
@@ -29,8 +29,8 @@ export function getPersonalStore(learnerId: string): MemoryStore {
   if (!/^[a-f0-9-]{36}$/.test(learnerId)) throw new Error('Invalid learner identity');
   const root = getStore();
   if ((root as TransactionalStore).backend !== 'redis') return learnerStore(root, learnerId);
-  const url = (process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL)!;
-  const token = (process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN)!;
+  const url = (process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL ?? process.env.REDIS_KV_REST_API_URL)!;
+  const token = (process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN ?? process.env.REDIS_KV_REST_API_TOKEN)!;
   const key = `${process.env.REDPEN_REDIS_KEY ?? 'redpen:demo:v1'}:learner:${learnerId}`;
   globalStores.__redpenRedisStores ??= new Map();
   const cacheKey = `${url}:${key}:${token}`;

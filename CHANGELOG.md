@@ -21,7 +21,7 @@
 - 38 tests, typecheck, content validation and production build pass. Build required elevated filesystem access after a Windows EPERM.
 - Phase 3 browser interaction and actual NVIDIA access remain unverified. Teacher dashboard remains Phase 4.
 
-## 2026-10-31 — Phase 2 implemented
+## 2026-10-31 ï¿½ Phase 2 implemented
 
 - Added eight-item diagnostic, bounded Rasch mastery, adaptive bank selection and server-owned grading.
 - Added answer/reasoning form, feedback, mastery evidence and saved sessions with refresh/resume.
@@ -68,3 +68,7 @@ Investigated the reported reflection answer: 50 degrees to surface correctly yie
 ## D-022 - Meaningful adaptive task diversity
 
 Added four independently graded thinking tasks across the seven supported generation families: identify a principle, explain an error, apply a principle to a changed situation, and calculate. Teaching actions and recent task history choose the next kind; generated verification requires two different kinds of task, not numerical variants. Correct improvement moves practice to another concept while retaining spaced reviews. Task labels and reasoning prompts explain the change. Saved sessions remain compatible; legacy untyped checks do not fabricate diverse evidence. Live Groq check passed error-explanation followed by application with sound reasoning at 0.95 confidence for both. Reviewed-bank fallback remains explicit outside supported generation.
+
+## D-024 Documentation package
+
+Replaced the short README with a polished product overview and local/Vercel setup guide. Added submission-ready SRS, System Architecture, and Testing & Validation documents under docs/. Verification results are dated and explicitly caveat the Redis alias edit made after the 71-test record; no tests were run for this documentation task.
