@@ -4,6 +4,8 @@
 
 Redpen is the PS-02 submission, **Adaptive exam-prep tutor with a learner model**, for The Product Space AI Hackathon. It focuses on a Class 10 physics syllabus and is an independent app in this project folder.
 
+**Live deployment:** [redpen-three.vercel.app](https://redpen-three.vercel.app/)
+
 ## Why Redpen
 
 Most quiz flows grade a final answer and move on. Redpen also asks for reasoning. A learner who selects the right option for the wrong reason may still need help; a wrong answer caused by a calculation slip should receive a different response from a conceptual misunderstanding.

@@ -195,3 +195,5 @@ Added four independently graded thinking tasks across the seven supported genera
 D-022 verification: 71/71 tests pass, typecheck passes, isolated production build and production HTTP smoke pass (including visible thinking-task label and learner/teacher isolation). Genuine isolated Groq loop passes explain-error -> apply with two sound reasoning checks. No saved learner progress reset. Final interactive browser acceptance remains with the user.
 
 D-024: Submission documentation package added: README, SRS, System Architecture, Testing & Validation. Existing test/live results are reported with limits; README calls for rerunning validation after the later Vercel Redis alias edit. No test commands run for documentation-only work.
+
+D-025: Added the owner-provided Vercel URL to project and submission docs; hosted persistence and browser acceptance remain clearly marked unverified.

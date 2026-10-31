@@ -1,6 +1,6 @@
 # Deploy Redpen on Vercel
 
-Status: adapter and build configuration are implemented. No Vercel project or live Redis connection has been provisioned or verified by this agent. The complete local live Groq correction/transfer loop has passed; hosted verification remains pending.
+Live deployment: [https://redpen-three.vercel.app/](https://redpen-three.vercel.app/) (URL provided by the project owner). This agent has not independently verified hosted Redis persistence or completed a browser acceptance pass against this deployment. The local live Groq correction/transfer loop has passed.
 
 ## 1. Import the repository
 

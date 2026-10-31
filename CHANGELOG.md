@@ -72,3 +72,7 @@ Added four independently graded thinking tasks across the seven supported genera
 ## D-024 Documentation package
 
 Replaced the short README with a polished product overview and local/Vercel setup guide. Added submission-ready SRS, System Architecture, and Testing & Validation documents under docs/. Verification results are dated and explicitly caveat the Redis alias edit made after the 71-test record; no tests were run for this documentation task.
+
+## D-025 Live deployment link
+
+Added the owner-provided https://redpen-three.vercel.app/ URL to the README, deployment guide, and submission overview. Documentation distinguishes the supplied URL from unverified hosted Redis persistence/browser acceptance.
